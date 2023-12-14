@@ -1,4 +1,5 @@
 import org.junit.Test;
+import org.w3c.dom.Node;
 
 import java.util.*;
 
@@ -22,7 +23,6 @@ public class algorithmtest {
             this.right = right;
         }
     }
-
     // 链表节点
     public static class ListNode {
         int val;
@@ -168,7 +168,6 @@ public class algorithmtest {
         in1(p.left, q.left, flag);
         in1(p.right, q.right, flag);
     }
-
     @Test
     public void isSymmetric() {
         System.out.println(isSymmetric(buildTree(1, 2, 2, null, 3, null, 3)));
@@ -192,7 +191,6 @@ public class algorithmtest {
         in2(p.left, q.right, flag);
         in2(p.right, q.left, flag);
     }
-
     @Test
     public void MinDepth() {
         List<Integer> list = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5));
@@ -218,7 +216,6 @@ public class algorithmtest {
         list[1]--;
 
     }
-
     @Test
     public void hasPathSum() {
         List<Integer> p = new ArrayList<>(Arrays.asList(1, 2));
@@ -255,7 +252,6 @@ public class algorithmtest {
 
         targetSum += node.val;
     }
-
     @Test
     public void invertTree() {
         List<Integer> list = new ArrayList<>();
@@ -290,7 +286,6 @@ public class algorithmtest {
         }
         return root;
     }
-
     @Test
     public void binaryTreePaths() {
         System.out.println(binaryTreePaths(buildTree(37,-34,-48,null,-100,-100,48,null,null,null,null,-54,null,-71,-22,null,null,null,8)));
@@ -317,7 +312,6 @@ public class algorithmtest {
         tmp.pop();
         tmp.pop();
     }
-
     @Test
     public void sumOfLeftLeaves() {
         System.out.println(sumOfLeftLeaves(buildTree(1)));
@@ -335,7 +329,6 @@ public class algorithmtest {
         }
         in4(node.right,ans);
     }
-
     @Test
     public void isValidBST() {
         System.out.println(isValidBST(buildTree(5,1,4,null,null,3,6)));
@@ -353,7 +346,6 @@ public class algorithmtest {
         ans[0]= node.val;
         in5(node.right,ans);
     }
-
     @Test
     public void levelOrder() {
         System.out.println(levelOrder(buildTree(3,9,20,null,null,15,7)));
@@ -383,7 +375,6 @@ public class algorithmtest {
             list.add(tmp);
         }
     }
-
     @Test
     public void zigzagLevelOrder() {
         System.out.println(zigzagLevelOrder(buildTree(3,9,20,null,null,15,7)));
@@ -412,7 +403,6 @@ public class algorithmtest {
             index++;
         }
     }
-
     @Test
     public void pathSum() {
         System.out.println(pathSum(buildTree(5,4,8,11,null,13,4,7,2,null,null,5,1), 22));
@@ -438,6 +428,92 @@ public class algorithmtest {
 
         targetSum += node.val;
         tmp.remove(tmp.size()-1);
+    }
+    @Test
+    public void buildTree() {
+        int[]a=new int[]{3,9,20,15,7};
+        int[]b=new int[]{9,3,15,20,7};
+        System.out.println(buildTree(a,b));
+    }
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        TreeNode root=new TreeNode();
+        List<TreeNode> stack=new ArrayList<>();
+
+        for (int i = 0; i < preorder.length; i++) {
+
+        }
+        return null;
+    }
+
+
+
+
+
+
+    public static class Node {
+        public int val;
+        public List<Node> children;
+
+        public Node() {}
+
+        public Node(int _val) {
+            val = _val;
+        }
+
+        public Node(int _val, List<Node> _children) {
+            val = _val;
+            children = _children;
+        }
+    }
+    public List<List<Integer>> levelOrder(Node root) {
+        List<List<Integer>> list=new ArrayList<>();
+        lev1(root,list);
+        return list;
+    }
+    public void lev1(Node root,List<List<Integer>> list){
+        if (root==null)return;
+        Queue<Node> queue=new LinkedList<>();
+        queue.add(root);
+        while (!queue.isEmpty()){
+            List<Integer> tmp=new ArrayList<>();
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                Node poll = queue.poll();
+                tmp.add(poll.val);
+                for (Node child : poll.children) {
+                    if(child!=null)queue.add(child);
+                }
+            }
+            list.add(tmp);
+        }
+    }
+
+    public void flatten(TreeNode root) {
+        List<TreeNode> list=new ArrayList<>();
+        pre1(root,list);
+        for (int i = 0; i < list.size()-1; i++) {
+            list.get(i).right=list.get(i+1);
+            list.get(i).left=null;
+        }
+    }
+    public void pre1(TreeNode node,List<TreeNode> list){
+        if(node==null)return;
+        list.add(node);
+        pre1(node.left, list);
+        pre1(node.right,list);
+    }
+
+    public int kthSmallest(TreeNode root, int k) {
+        List<Integer>list =new ArrayList<>();
+        in6(root,list);
+        return list.get(k-1);
+    }
+    public void in6(TreeNode node,List<Integer>list){
+        if(node==null)return;
+
+        in6(node.left,list);
+        list.add(node.val);
+        in6(node.right,list);
     }
 
     public static String compressString(String S) {
