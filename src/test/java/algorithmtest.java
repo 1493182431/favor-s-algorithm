@@ -447,8 +447,53 @@ public class algorithmtest {
 
 
 
+    public int sumNumbers(TreeNode root) {
+        int[] ans=new int[1];
+        List<Integer>tmp=new ArrayList<>();
+        INsumNumbers(root,ans,tmp);
+        return ans[0];
+    }
+    public void INsumNumbers(TreeNode node,int[] ans,List<Integer>tmp){
+        if(node==null)return;
+        tmp.add(node.val);
+        if(node.left==null&& node.right==null){
+            for (int i = 0; i < tmp.size(); i++) {
+                ans[0]+= (int) (tmp.get(i)*Math.pow(10.0, tmp.size()-i-1));
+            }
+        }
+        INsumNumbers(node.left, ans,tmp);
+        INsumNumbers(node.right, ans,tmp);
+        tmp.remove(tmp.size()-1);
+    }
 
 
+
+
+
+
+
+    public int[] findMode(TreeNode root) {
+        Map<Integer,Integer>map=new HashMap<>();
+        int max=0;
+        in7(root,map);
+        for (Integer value : map.values()) {
+            max=Math.max(value, max);
+        }
+
+        List<Integer>list=new ArrayList<>();
+        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+            if(entry.getValue()==max)list.add(entry.getKey());
+        }
+        return list.stream().mapToInt(Integer::intValue).toArray();
+    }
+    public void in7(TreeNode node,Map<Integer,Integer>map){
+        if(node==null)return;
+
+        in7(node.left,map);
+        if(map.containsKey(node.val))map.put(node.val, map.get(node.val)+1);
+        else map.put(node.val, 1);
+        in7(node.right,map);
+    }
 
     public static class Node {
         public int val;
