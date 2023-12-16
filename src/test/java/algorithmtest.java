@@ -23,16 +23,6 @@ public class algorithmtest {
             this.right = right;
         }
     }
-    // 链表节点
-    public static class ListNode {
-        int val;
-        ListNode next;
-
-        ListNode(int x) {
-            val = x;
-            next = null;
-        }
-    }
 
     @Test
     // 深度遍历测试
@@ -40,7 +30,7 @@ public class algorithmtest {
         List<Integer> preOrder = new ArrayList<>();
         List<Integer> inOrder = new ArrayList<>();
         List<Integer> postOrder = new ArrayList<>();
-        DFS(buildTree(3,9,20,null,null,15,7), preOrder, inOrder, postOrder);
+        DFS(buildTree(3, 9, 20, null, null, 15, 7), preOrder, inOrder, postOrder);
         System.out.println("前序遍历：" + preOrder);
         System.out.println("中序遍历：" + inOrder);
         System.out.println("后序遍历：" + postOrder);
@@ -146,16 +136,87 @@ public class algorithmtest {
         return root;
     }
 
+    /* 构建二叉树：分治 */
+    TreeNode dfs(int[] preorder, Map<Integer, Integer> inorderMap, int i, int l, int r) {
+        // 子树区间为空时终止
+        if (r - l < 0)
+            return null;
+        // 初始化根节点
+        TreeNode root = new TreeNode(preorder[i]);
+        // 查询 m ，从而划分左右子树
+        int m = inorderMap.get(preorder[i]);
+        // 子问题：构建左子树
+        root.left = dfs(preorder, inorderMap, i + 1, l, m - 1);
+        // 子问题：构建右子树
+        root.right = dfs(preorder, inorderMap, i + 1 + m - l, m + 1, r);
+        // 返回根节点
+        return root;
+    }
+
+    /* 构建二叉树 */
+    TreeNode buildTreeByPreAndIn(int[] preorder, int[] inorder) {
+        // 初始化哈希表，存储 inorder 元素到索引的映射
+        Map<Integer, Integer> inorderMap = new HashMap<>();
+        for (int i = 0; i < inorder.length; i++) {
+            inorderMap.put(inorder[i], i);
+        }
+        return dfs(preorder, inorderMap, 0, 0, inorder.length - 1);
+    }
+
+    // 链表节点
+    public static class ListNode {
+        int val;
+        ListNode next;
+
+        ListNode(int x) {
+            val = x;
+            next = null;
+        }
+    }
+    @Test
+    public void buildLinkedList(){
+        List<Integer> list=new ArrayList<>();
+        ListNode head=buildLinkedList(1,2,4,5,6,9);
+        while(head!=null){
+            list.add(head.val);
+            head= head.next;
+        }
+        System.out.println(list);
+    }
+
+    public static void travelLinkedList(ListNode head){
+        List<Integer> list=new ArrayList<>();
+        while(head!=null){
+            list.add(head.val);
+            head= head.next;
+        }
+        System.out.println(list);
+    }
+    public static ListNode buildLinkedList(Integer... a){
+        List<Integer> list = new ArrayList<>(Arrays.asList(a));
+        if(list.isEmpty()||list==null)return null;
+        ListNode head=new ListNode(list.get(0));
+        ListNode last=head;
+        for (int i = 1; i < list.size(); i++) {
+            ListNode node=new ListNode(list.get(i));
+            node.next=null;
+            last.next=node;
+            last=node;
+        }
+        return head;
+    }
 
     @Test
     public void isSameTree() {
         System.out.println(isSameTree(buildTree(1, 2, 1), buildTree(1, 1, 2)));
     }
+
     public boolean isSameTree(TreeNode p, TreeNode q) {
         int[] flag = new int[]{1};
         in1(p, q, flag);
         return flag[0] == 1;
     }
+
     public static void in1(TreeNode p, TreeNode q, int[] flag) {
         if (p == null && q == null) return;
 
@@ -168,10 +229,12 @@ public class algorithmtest {
         in1(p.left, q.left, flag);
         in1(p.right, q.right, flag);
     }
+
     @Test
     public void isSymmetric() {
         System.out.println(isSymmetric(buildTree(1, 2, 2, null, 3, null, 3)));
     }
+
     public boolean isSymmetric(TreeNode root) {
         int[] flag = new int[]{1};
         TreeNode p = root.left;
@@ -179,6 +242,7 @@ public class algorithmtest {
         in2(p, q, flag);
         return flag[0] == 1;
     }
+
     public static void in2(TreeNode p, TreeNode q, int[] flag) {
         if (p == null && q == null) return;
 
@@ -191,17 +255,20 @@ public class algorithmtest {
         in2(p.left, q.right, flag);
         in2(p.right, q.left, flag);
     }
+
     @Test
     public void MinDepth() {
         List<Integer> list = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5));
         System.out.println(MinDepth(arrayToBinaryTree(list)));
     }
+
     public int MinDepth(TreeNode root) {
         if (root == null) return 0;
         int[] list = new int[]{999999, 0};
         minDepth(root, list);
         return list[0];
     }
+
     public void minDepth(TreeNode node, int[] list) {
         if (node == null) return;
 
@@ -216,12 +283,14 @@ public class algorithmtest {
         list[1]--;
 
     }
+
     @Test
     public void hasPathSum() {
         List<Integer> p = new ArrayList<>(Arrays.asList(1, 2));
 
         System.out.println(hasPathSum(arrayToBinaryTree(p), 1));
     }
+
     public boolean hasPathSum(TreeNode root, int targetSum) {
         // java基本数据类型是值传递，在深层递归中改变的值不会传递到浅层递归。
 
@@ -241,6 +310,7 @@ public class algorithmtest {
         inHasPathSum(root, targetSum, list);
         return list.get(0) == 0;
     }
+
     public static void inHasPathSum(TreeNode node, int targetSum, List<Integer> list) {
         if (node == null) return;
 
@@ -252,6 +322,7 @@ public class algorithmtest {
 
         targetSum += node.val;
     }
+
     @Test
     public void invertTree() {
         List<Integer> list = new ArrayList<>();
@@ -259,6 +330,7 @@ public class algorithmtest {
         BFS(treeNode, list);
         System.out.println(list);
     }
+
     public TreeNode invertTree(TreeNode root) {
         if (root == null) return null;
         // 初始化队列，加入根节点
@@ -286,135 +358,153 @@ public class algorithmtest {
         }
         return root;
     }
+
     @Test
     public void binaryTreePaths() {
-        System.out.println(binaryTreePaths(buildTree(37,-34,-48,null,-100,-100,48,null,null,null,null,-54,null,-71,-22,null,null,null,8)));
+        System.out.println(binaryTreePaths(buildTree(37, -34, -48, null, -100, -100, 48, null, null, null, null, -54, null, -71, -22, null, null, null, 8)));
     }
+
     public List<String> binaryTreePaths(TreeNode root) {
-        Stack<String> tmp=new Stack<>();
-        List<String> list=new ArrayList<>();
-        in3(root,list,tmp);
+        Stack<String> tmp = new Stack<>();
+        List<String> list = new ArrayList<>();
+        in3(root, list, tmp);
         return list;
     }
-    public void in3(TreeNode node,List<String> list,Stack<String> tmp){
-        if(node==null)return;
+
+    public void in3(TreeNode node, List<String> list, Stack<String> tmp) {
+        if (node == null) return;
         tmp.push(String.valueOf(node.val));
         tmp.push("->");
-        if(node.left==null&& node.right==null) {
+        if (node.left == null && node.right == null) {
             StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < tmp.size()-1; i++) {
+            for (int i = 0; i < tmp.size() - 1; i++) {
                 sb.append(tmp.get(i));
             }
             list.add(sb.toString());
         }
-        in3(node.left,list,tmp);
-        in3(node.right,list,tmp);
+        in3(node.left, list, tmp);
+        in3(node.right, list, tmp);
         tmp.pop();
         tmp.pop();
     }
+
     @Test
     public void sumOfLeftLeaves() {
         System.out.println(sumOfLeftLeaves(buildTree(1)));
     }
+
     public int sumOfLeftLeaves(TreeNode root) {
-        int[] ans=new int[]{0};
-        in4(root,ans);
+        int[] ans = new int[]{0};
+        in4(root, ans);
         return ans[0];
     }
-    public void in4(TreeNode node,int[] ans){
-        if(node==null)return;
-        in4(node.left,ans);
-        if(node.left!=null&&node.left.left==null&&node.left.right==null) {
-            ans[0]+=node.left.val;
+
+    public void in4(TreeNode node, int[] ans) {
+        if (node == null) return;
+        in4(node.left, ans);
+        if (node.left != null && node.left.left == null && node.left.right == null) {
+            ans[0] += node.left.val;
         }
-        in4(node.right,ans);
+        in4(node.right, ans);
     }
+
     @Test
     public void isValidBST() {
-        System.out.println(isValidBST(buildTree(5,1,4,null,null,3,6)));
+        System.out.println(isValidBST(buildTree(5, 1, 4, null, null, 3, 6)));
     }
+
     public boolean isValidBST(TreeNode root) {
-        long[] ans=new long[]{0,1};
-        ans[0]=Long.MIN_VALUE;
-        in5(root,ans);
-        return ans[1]==1;
+        long[] ans = new long[]{0, 1};
+        ans[0] = Long.MIN_VALUE;
+        in5(root, ans);
+        return ans[1] == 1;
     }
-    public void in5(TreeNode node,long[] ans){
-        if(node==null)return;
-        in5(node.left,ans);
-        if(ans[0]>= node.val)ans[1]=0;
-        ans[0]= node.val;
-        in5(node.right,ans);
+
+    public void in5(TreeNode node, long[] ans) {
+        if (node == null) return;
+        in5(node.left, ans);
+        if (ans[0] >= node.val) ans[1] = 0;
+        ans[0] = node.val;
+        in5(node.right, ans);
     }
+
     @Test
     public void levelOrder() {
-        System.out.println(levelOrder(buildTree(3,9,20,null,null,15,7)));
+        System.out.println(levelOrder(buildTree(3, 9, 20, null, null, 15, 7)));
     }
+
     public List<List<Integer>> levelOrder(TreeNode root) {
-        List<List<Integer>> list=new ArrayList<>();
-        lev1(root,list);
+        List<List<Integer>> list = new ArrayList<>();
+        lev1(root, list);
         return list;
     }
-    public void lev1(TreeNode root,List<List<Integer>> list){
-        if (root==null)return;
-        Queue<TreeNode> queue=new LinkedList<>();
+
+    public void lev1(TreeNode root, List<List<Integer>> list) {
+        if (root == null) return;
+        Queue<TreeNode> queue = new LinkedList<>();
         queue.add(root);
-        while (!queue.isEmpty()){
-            List<Integer> tmp=new ArrayList<>();
+        while (!queue.isEmpty()) {
+            List<Integer> tmp = new ArrayList<>();
             int size = queue.size();
             for (int i = 0; i < size; i++) {
                 TreeNode poll = queue.poll();
                 tmp.add(poll.val);
-                if(poll.left!=null){
+                if (poll.left != null) {
                     queue.add(poll.left);
                 }
-                if(poll.right!=null){
+                if (poll.right != null) {
                     queue.add(poll.right);
                 }
             }
             list.add(tmp);
         }
     }
+
     @Test
     public void zigzagLevelOrder() {
-        System.out.println(zigzagLevelOrder(buildTree(3,9,20,null,null,15,7)));
+        System.out.println(zigzagLevelOrder(buildTree(3, 9, 20, null, null, 15, 7)));
     }
+
     public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
-        List<List<Integer>> list=new ArrayList<>();
-        lev2(root,list);
+        List<List<Integer>> list = new ArrayList<>();
+        lev2(root, list);
         return list;
     }
-    public void lev2(TreeNode root,List<List<Integer>> list){
-        if (root==null)return;
-        Queue<TreeNode> queue=new LinkedList<>();
+
+    public void lev2(TreeNode root, List<List<Integer>> list) {
+        if (root == null) return;
+        Queue<TreeNode> queue = new LinkedList<>();
         queue.add(root);
-        int index=1;
-        while (!queue.isEmpty()){
-            List<Integer> tmp=new ArrayList<>();
+        int index = 1;
+        while (!queue.isEmpty()) {
+            List<Integer> tmp = new ArrayList<>();
             int size = queue.size();
             for (int i = 0; i < size; i++) {
                 TreeNode poll = queue.poll();
-                if((index&1)==0)tmp.add(0, poll.val);
+                if ((index & 1) == 0) tmp.add(0, poll.val);
                 else tmp.add(poll.val);
-                if(poll.left!=null) queue.offer(poll.left);
-                if(poll.right!=null)queue.offer(poll.right);
+                if (poll.left != null) queue.offer(poll.left);
+                if (poll.right != null) queue.offer(poll.right);
             }
             list.add(tmp);
             index++;
         }
     }
+
     @Test
     public void pathSum() {
-        System.out.println(pathSum(buildTree(5,4,8,11,null,13,4,7,2,null,null,5,1), 22));
+        System.out.println(pathSum(buildTree(5, 4, 8, 11, null, 13, 4, 7, 2, null, null, 5, 1), 22));
     }
-    public List<List<Integer>> pathSum(TreeNode root, int targetSum) {
-        List<List<Integer>>list = new ArrayList<>();
-        List<Integer>tmp=new ArrayList<>();
 
-        inHasPathSum(root, targetSum, tmp,list);
+    public List<List<Integer>> pathSum(TreeNode root, int targetSum) {
+        List<List<Integer>> list = new ArrayList<>();
+        List<Integer> tmp = new ArrayList<>();
+
+        inHasPathSum(root, targetSum, tmp, list);
         return list;
     }
-    public static void inHasPathSum(TreeNode node, int targetSum,List<Integer>tmp, List<List<Integer>>list) {
+
+    public static void inHasPathSum(TreeNode node, int targetSum, List<Integer> tmp, List<List<Integer>> list) {
         if (node == null) return;
 
         targetSum -= node.val;
@@ -422,22 +512,24 @@ public class algorithmtest {
         if (node.left == null && node.right == null && targetSum == 0) {
             list.add(new ArrayList<>(tmp));
         }
-        inHasPathSum(node.left, targetSum, tmp,list);
+        inHasPathSum(node.left, targetSum, tmp, list);
 
-        inHasPathSum(node.right, targetSum, tmp,list);
+        inHasPathSum(node.right, targetSum, tmp, list);
 
         targetSum += node.val;
-        tmp.remove(tmp.size()-1);
+        tmp.remove(tmp.size() - 1);
     }
+
     @Test
     public void buildTree() {
-        int[]a=new int[]{3,9,20,15,7};
-        int[]b=new int[]{9,3,15,20,7};
-        System.out.println(buildTree(a,b));
+        int[] a = new int[]{3, 9, 20, 15, 7};
+        int[] b = new int[]{9, 3, 15, 20, 7};
+        System.out.println(buildTree(a, b));
     }
+
     public TreeNode buildTree(int[] preorder, int[] inorder) {
-        TreeNode root=new TreeNode();
-        List<TreeNode> stack=new ArrayList<>();
+        TreeNode root = new TreeNode();
+        List<TreeNode> stack = new ArrayList<>();
 
         for (int i = 0; i < preorder.length; i++) {
 
@@ -445,61 +537,71 @@ public class algorithmtest {
         return null;
     }
 
-
-
     public int sumNumbers(TreeNode root) {
-        int[] ans=new int[1];
-        List<Integer>tmp=new ArrayList<>();
-        INsumNumbers(root,ans,tmp);
+        int[] ans = new int[1];
+        List<Integer> tmp = new ArrayList<>();
+        INsumNumbers(root, ans, tmp);
         return ans[0];
     }
-    public void INsumNumbers(TreeNode node,int[] ans,List<Integer>tmp){
-        if(node==null)return;
+
+    public void INsumNumbers(TreeNode node, int[] ans, List<Integer> tmp) {
+        if (node == null) return;
         tmp.add(node.val);
-        if(node.left==null&& node.right==null){
+        if (node.left == null && node.right == null) {
             for (int i = 0; i < tmp.size(); i++) {
-                ans[0]+= (int) (tmp.get(i)*Math.pow(10.0, tmp.size()-i-1));
+                ans[0] += (int) (tmp.get(i) * Math.pow(10.0, tmp.size() - i - 1));
             }
         }
-        INsumNumbers(node.left, ans,tmp);
-        INsumNumbers(node.right, ans,tmp);
-        tmp.remove(tmp.size()-1);
+        INsumNumbers(node.left, ans, tmp);
+        INsumNumbers(node.right, ans, tmp);
+        tmp.remove(tmp.size() - 1);
     }
 
+    @Test
+    public void canPermutePalindrome() {
+        System.out.println(canPermutePalindrome("abdg"));
+    }
 
-
-
-
-
+    public boolean canPermutePalindrome(String s) {
+        Set<Character> set = new HashSet<>();
+        for (char c : s.toCharArray()) {
+            if (!set.add(c)) {
+                set.remove(c);
+            }
+        }
+        return set.size() == 1 || set.isEmpty();
+    }
 
     public int[] findMode(TreeNode root) {
-        Map<Integer,Integer>map=new HashMap<>();
-        int max=0;
-        in7(root,map);
+        Map<Integer, Integer> map = new HashMap<>();
+        int max = 0;
+        in7(root, map);
         for (Integer value : map.values()) {
-            max=Math.max(value, max);
+            max = Math.max(value, max);
         }
 
-        List<Integer>list=new ArrayList<>();
+        List<Integer> list = new ArrayList<>();
         for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
-            if(entry.getValue()==max)list.add(entry.getKey());
+            if (entry.getValue() == max) list.add(entry.getKey());
         }
         return list.stream().mapToInt(Integer::intValue).toArray();
     }
-    public void in7(TreeNode node,Map<Integer,Integer>map){
-        if(node==null)return;
 
-        in7(node.left,map);
-        if(map.containsKey(node.val))map.put(node.val, map.get(node.val)+1);
+    public void in7(TreeNode node, Map<Integer, Integer> map) {
+        if (node == null) return;
+
+        in7(node.left, map);
+        if (map.containsKey(node.val)) map.put(node.val, map.get(node.val) + 1);
         else map.put(node.val, 1);
-        in7(node.right,map);
+        in7(node.right, map);
     }
 
     public static class Node {
         public int val;
         public List<Node> children;
 
-        public Node() {}
+        public Node() {
+        }
 
         public Node(int _val) {
             val = _val;
@@ -510,23 +612,25 @@ public class algorithmtest {
             children = _children;
         }
     }
+
     public List<List<Integer>> levelOrder(Node root) {
-        List<List<Integer>> list=new ArrayList<>();
-        lev1(root,list);
+        List<List<Integer>> list = new ArrayList<>();
+        lev1(root, list);
         return list;
     }
-    public void lev1(Node root,List<List<Integer>> list){
-        if (root==null)return;
-        Queue<Node> queue=new LinkedList<>();
+
+    public void lev1(Node root, List<List<Integer>> list) {
+        if (root == null) return;
+        Queue<Node> queue = new LinkedList<>();
         queue.add(root);
-        while (!queue.isEmpty()){
-            List<Integer> tmp=new ArrayList<>();
+        while (!queue.isEmpty()) {
+            List<Integer> tmp = new ArrayList<>();
             int size = queue.size();
             for (int i = 0; i < size; i++) {
                 Node poll = queue.poll();
                 tmp.add(poll.val);
                 for (Node child : poll.children) {
-                    if(child!=null)queue.add(child);
+                    if (child != null) queue.add(child);
                 }
             }
             list.add(tmp);
@@ -534,31 +638,33 @@ public class algorithmtest {
     }
 
     public void flatten(TreeNode root) {
-        List<TreeNode> list=new ArrayList<>();
-        pre1(root,list);
-        for (int i = 0; i < list.size()-1; i++) {
-            list.get(i).right=list.get(i+1);
-            list.get(i).left=null;
+        List<TreeNode> list = new ArrayList<>();
+        pre1(root, list);
+        for (int i = 0; i < list.size() - 1; i++) {
+            list.get(i).right = list.get(i + 1);
+            list.get(i).left = null;
         }
     }
-    public void pre1(TreeNode node,List<TreeNode> list){
-        if(node==null)return;
+
+    public void pre1(TreeNode node, List<TreeNode> list) {
+        if (node == null) return;
         list.add(node);
         pre1(node.left, list);
-        pre1(node.right,list);
+        pre1(node.right, list);
     }
 
     public int kthSmallest(TreeNode root, int k) {
-        List<Integer>list =new ArrayList<>();
-        in6(root,list);
-        return list.get(k-1);
+        List<Integer> list = new ArrayList<>();
+        in6(root, list);
+        return list.get(k - 1);
     }
-    public void in6(TreeNode node,List<Integer>list){
-        if(node==null)return;
 
-        in6(node.left,list);
+    public void in6(TreeNode node, List<Integer> list) {
+        if (node == null) return;
+
+        in6(node.left, list);
         list.add(node.val);
-        in6(node.right,list);
+        in6(node.right, list);
     }
 
     public static String compressString(String S) {
@@ -579,6 +685,7 @@ public class algorithmtest {
 
         return S.length() < stringBuilder.length() ? S : stringBuilder.toString();
     }
+
     public String replaceSpaces(String S, int length) {
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < length; i++) {
@@ -587,6 +694,7 @@ public class algorithmtest {
         }
         return stringBuilder.toString();
     }
+
     public boolean CheckPermutation(String s1, String s2) {
         char[] charArray1 = s1.toCharArray();
         Arrays.sort(charArray1);
@@ -594,6 +702,7 @@ public class algorithmtest {
         Arrays.sort(charArray2);
         return Arrays.equals(charArray1, charArray2);
     }
+
     public boolean isUnique(String astr) {
         Set<Character> set = new HashSet<>();
         for (char c : astr.toCharArray()) {
@@ -603,6 +712,7 @@ public class algorithmtest {
         }
         return true;
     }
+
     public int[] diStringMatch(String s) {
         int max = s.length(), min = 0;
         int[] ans = new int[s.length() + 1];
@@ -618,6 +728,7 @@ public class algorithmtest {
         ans[s.length() + 1] = s.charAt(s.length() - 1) == 'I' ? max : min;
         return ans;
     }
+
     public static boolean validPalindrome(String s) {
         int delete1 = 1, delete2 = 1;
         boolean flag1 = true, flag2 = true;
@@ -639,6 +750,7 @@ public class algorithmtest {
         }
         return flag1 || flag2;
     }
+
     public int climbStairs(int n) {
         if (n == 1 || n == 0) return 1;
         int one = 1, two = 1, tmp = 0;
@@ -649,6 +761,7 @@ public class algorithmtest {
         }
         return tmp;
     }
+
     public int firstUniqChar(String s) {
         Map<Character, Integer> map = new HashMap<>();
         for (char c : s.toCharArray()) {
@@ -699,6 +812,7 @@ public class algorithmtest {
 
         return -1;
     }
+
     public boolean canConstruct(String ransomNote, String magazine) {
         int len = ransomNote.length();
         Map<Character, Integer> map = new HashMap<>();
@@ -714,6 +828,7 @@ public class algorithmtest {
         }
         return len == 0;
     }
+
     public static int[] intersect(int[] nums1, int[] nums2) {
         Map<Integer, Integer> map = new HashMap<>();
         ArrayList<Integer> ans = new ArrayList<>();
@@ -729,6 +844,7 @@ public class algorithmtest {
         }
         return ans.stream().mapToInt(Integer::intValue).toArray();
     }
+
     public static ListNode getIntersectionNode(ListNode headA, ListNode headB) {
         ListNode a = headA, b = headB;
         Set<ListNode> set = new HashSet<>();
@@ -748,6 +864,7 @@ public class algorithmtest {
 //        }
         return null;
     }
+
     public static boolean hasCycle(ListNode head) {
         if (head == null) return false;
         Set<ListNode> set = new HashSet<>();
@@ -759,6 +876,7 @@ public class algorithmtest {
         }
         return false;
     }
+
     public static int romanToInt(String s) {
         int f = 2000, l = 0, ans = 0;
         for (int i = 0; i < s.length(); i++) {
@@ -798,6 +916,7 @@ public class algorithmtest {
         }
         return ans;
     }
+
     public static String[] findRelativeRanks(int[] score) {
         int n = score.length;
         String[] desc = {"Gold Medal", "Silver Medal", "Bronze Medal"};
@@ -818,6 +937,7 @@ public class algorithmtest {
         }
         return ans;
     }
+
     public static void reverseString(char[] s) {
         char temp;
         int len = s.length;
@@ -827,6 +947,7 @@ public class algorithmtest {
             s[len - i - 1] = temp;
         }
     }
+
     public static boolean wordPattern(String pattern, String s) {
         Map<Character, String> map = new HashMap<>();
         String[] split = s.split(" ");
@@ -842,6 +963,7 @@ public class algorithmtest {
         }
         return true;
     }
+
     public static boolean isAnagram(String s, String t) {
         char[] scharArray = s.toCharArray();
         char[] tcharArray = t.toCharArray();
@@ -849,6 +971,7 @@ public class algorithmtest {
         Arrays.sort(tcharArray);
         return Arrays.equals(scharArray, tcharArray);
     }
+
     public static boolean isIsomorphic(String s, String t) {
         Map<Character, Character> map = new HashMap<>();
         for (int i = 0; i < s.length(); i++) {
@@ -862,6 +985,7 @@ public class algorithmtest {
         }
         return true;
     }
+
     public static String addBinary(String a, String b) {
         //模拟全加器
         StringBuilder ans = new StringBuilder();
@@ -882,6 +1006,7 @@ public class algorithmtest {
         }
         return ans.reverse().toString();
     }
+
     public static int lengthOfLastWord(String s) {
         int lenght = 0, size = s.length() - 1;
         if (s.charAt(s.length() - 1) == ' ') {
@@ -897,6 +1022,7 @@ public class algorithmtest {
         }
         return lenght;
     }
+
     public static boolean isValid(String s) {
 
         List<Character> stack = new ArrayList<>();
@@ -913,6 +1039,7 @@ public class algorithmtest {
         }
         return stack.isEmpty();
     }
+
     public static String longestCommonPrefix(String[] strs) {
 
         String ans = strs[0];
@@ -929,6 +1056,7 @@ public class algorithmtest {
         }
         return ans;
     }
+
     public static List<Integer> findDisappearedNumbers(int[] nums) {
         List<Integer> ans = new ArrayList<>();
         List<Integer> temp = new ArrayList<>(Collections.nCopies(nums.length + 1, 0));
@@ -942,6 +1070,7 @@ public class algorithmtest {
         }
         return ans;
     }
+
     public static int thirdMax(int[] nums) {
         Set<Integer> set = new TreeSet<>();
         for (int num : nums) {
@@ -951,6 +1080,7 @@ public class algorithmtest {
         if (array.length < 3) return array[array.length - 1];
         return array[array.length - 3];
     }
+
     public static List<Integer> getRow(int rowIndex) {
         int index = rowIndex + 1;
         List<List<Integer>> lists = new ArrayList<>(index);
@@ -967,6 +1097,7 @@ public class algorithmtest {
         }
         return lists.get(index);
     }
+
     public static List<List<Integer>> generate(int numRows) {
         List<List<Integer>> lists = new ArrayList<>(numRows);
         for (int i = 1; i <= numRows; i++) {
@@ -982,6 +1113,7 @@ public class algorithmtest {
         }
         return lists;
     }
+
     public int singleNumber(int[] nums) {
         Map<Integer, Integer> map = new HashMap<>();
         for (int num : nums) {
@@ -998,5 +1130,180 @@ public class algorithmtest {
         }
         return 0;
     }
+
+    @Test
+    public void rotate() {
+        int[][] matrix = new int[][]{new int[]{1, 2, 3}, new int[]{4, 5, 6}, new int[]{7, 8, 9}};
+        rotate(matrix);
+        System.out.println(Arrays.deepToString(matrix));
+    }
+    public void rotate(int[][] matrix) {
+        if (matrix.length == 0) return;
+        int len = matrix.length - 1;
+        int tmplen = matrix.length - 1;
+        int start = 0;
+        while (start <= tmplen) {
+            for (int i = start; i < tmplen; i++) {
+                int temp = matrix[start][i];
+                // 每次循环交换4个元素
+                matrix[start][i] = matrix[len - i][start];
+                matrix[len - i][start] = matrix[len - start][len - i];
+                matrix[len - start][len - i] = matrix[i][len - start];
+                matrix[i][len - start] = temp;
+            }
+            start++;
+            tmplen--;
+        }
+    }
+
+    public void setZeroes(int[][] matrix) {
+        Set<Integer>row=new HashSet<>();
+        Set<Integer>column=new HashSet<>();
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[0].length; j++) {
+                if(matrix[i][j]==0){
+                    row.add(i);
+                    column.add(j);
+                }
+            }
+        }
+        for (Integer i : row) {
+            for (int j = 0; j < matrix[0].length; j++) {
+                matrix[i][j]=0;
+            }
+        }
+        for (Integer j : column) {
+            for (int i = 0; i < matrix.length; i++) {
+                matrix[i][j]=0;
+            }
+        }
+
+    }
+
+    public boolean isFlipedString(String s1, String s2) {
+        if(s1.length()!=s2.length())return false;
+        String tmp=s2+s2;
+        return tmp.contains(s1);
+    }
+
+    public ListNode removeDuplicateNodes(ListNode head) {
+        if (head == null) {
+            return head;
+        }
+        Set<Integer> occurred = new HashSet<Integer>();
+        occurred.add(head.val);
+        ListNode pos = head;
+        // 枚举前驱节点
+        while (pos.next != null) {
+            // 当前待删除节点
+            ListNode cur = pos.next;
+            if (occurred.add(cur.val)) {
+                pos = pos.next;
+            } else {
+                pos.next = pos.next.next;
+            }
+        }
+        pos.next = null;
+        return head;
+    }
+
+    public int kthToLast(ListNode head, int k) {
+        ListNode first=head;
+        ListNode last=head;
+        for (int i = 1; i < k; i++) {
+            last=last.next;
+        }
+        while(last.next!=null){
+            first=first.next;
+            last= last.next;
+        }
+        return first.val;
+    }
+
+    public void deleteNode(ListNode node) {
+        while (true){
+            node.val= node.next.val;
+            if(node.next.next==null){
+                node.next=null;
+                break;
+            }
+            node= node.next;
+        }
+    }
+
+    public boolean isPalindrome(ListNode head) {
+        if(head==null)return true;
+        List<Integer>list=new ArrayList<>();
+        while (head!=null){
+            list.add(head.val);
+            head= head.next;
+
+        }
+        for (int i = 0; i < list.size()/2; i++) {
+            if(!Objects.equals(list.get(i), list.get(list.size() - 1 - i)))return false;
+        }
+
+        return true;
+    }
+
+    public ListNode dgetIntersectionNode(ListNode headA, ListNode headB) {
+        Set<ListNode>set=new HashSet<>();
+        while (headA!=null||headB!=null){
+            if(headA!=null){
+                if(!set.add(headA))return headA;
+                headA=headA.next;
+            }
+            if(headB!=null){
+                if(!set.add(headB))return headB;
+                headB=headB.next;
+            }
+        }
+        return null;
+    }
+
+    public ListNode detectCycle(ListNode head) {
+        Set<ListNode>set=new HashSet<>();
+        while (head!=null){
+            if(!set.add(head))return head;
+            head= head.next;
+        }
+        return null;
+    }
+
+    class MinStack {
+
+        private List<Integer>stack;
+
+
+        private int len=-1;
+
+        /** initialize your data structure here. */
+        public MinStack() {
+            this.stack=new ArrayList<>();
+        }
+
+        public void push(int x) {
+
+            stack.add(x);
+            len++;
+        }
+
+        public void pop() {
+            stack.remove(len);
+            len--;
+        }
+
+        public int top() {
+            return stack.get(len);
+        }
+
+        public int getMin() {
+            return this.min;
+        }
+    }
+
+
+
+
 }
 
