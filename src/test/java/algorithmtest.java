@@ -173,35 +173,37 @@ public class algorithmtest {
             next = null;
         }
     }
+
     @Test
-    public void buildLinkedList(){
-        List<Integer> list=new ArrayList<>();
-        ListNode head=buildLinkedList(1,2,4,5,6,9);
-        while(head!=null){
+    public void buildLinkedList() {
+        List<Integer> list = new ArrayList<>();
+        ListNode head = buildLinkedList(1, 2, 4, 5, 6, 9);
+        while (head != null) {
             list.add(head.val);
-            head= head.next;
+            head = head.next;
         }
         System.out.println(list);
     }
 
-    public static void travelLinkedList(ListNode head){
-        List<Integer> list=new ArrayList<>();
-        while(head!=null){
+    public static void travelLinkedList(ListNode head) {
+        List<Integer> list = new ArrayList<>();
+        while (head != null) {
             list.add(head.val);
-            head= head.next;
+            head = head.next;
         }
         System.out.println(list);
     }
-    public static ListNode buildLinkedList(Integer... a){
+
+    public static ListNode buildLinkedList(Integer... a) {
         List<Integer> list = new ArrayList<>(Arrays.asList(a));
-        if(list.isEmpty()||list==null)return null;
-        ListNode head=new ListNode(list.get(0));
-        ListNode last=head;
+        if (list.isEmpty() || list == null) return null;
+        ListNode head = new ListNode(list.get(0));
+        ListNode last = head;
         for (int i = 1; i < list.size(); i++) {
-            ListNode node=new ListNode(list.get(i));
-            node.next=null;
-            last.next=node;
-            last=node;
+            ListNode node = new ListNode(list.get(i));
+            node.next = null;
+            last.next = node;
+            last = node;
         }
         return head;
     }
@@ -1137,6 +1139,7 @@ public class algorithmtest {
         rotate(matrix);
         System.out.println(Arrays.deepToString(matrix));
     }
+
     public void rotate(int[][] matrix) {
         if (matrix.length == 0) return;
         int len = matrix.length - 1;
@@ -1157,32 +1160,34 @@ public class algorithmtest {
     }
 
     public void setZeroes(int[][] matrix) {
-        Set<Integer>row=new HashSet<>();
-        Set<Integer>column=new HashSet<>();
+        Set<Integer> row = new HashSet<>();
+        Set<Integer> column = new HashSet<>();
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix[0].length; j++) {
-                if(matrix[i][j]==0){
+                if (matrix[i][j] == 0) {
                     row.add(i);
                     column.add(j);
                 }
             }
         }
+
+
         for (Integer i : row) {
             for (int j = 0; j < matrix[0].length; j++) {
-                matrix[i][j]=0;
+                matrix[i][j] = 0;
             }
         }
         for (Integer j : column) {
             for (int i = 0; i < matrix.length; i++) {
-                matrix[i][j]=0;
+                matrix[i][j] = 0;
             }
         }
 
     }
 
     public boolean isFlipedString(String s1, String s2) {
-        if(s1.length()!=s2.length())return false;
-        String tmp=s2+s2;
+        if (s1.length() != s2.length()) return false;
+        String tmp = s2 + s2;
         return tmp.contains(s1);
     }
 
@@ -1208,99 +1213,183 @@ public class algorithmtest {
     }
 
     public int kthToLast(ListNode head, int k) {
-        ListNode first=head;
-        ListNode last=head;
+        ListNode first = head;
+        ListNode last = head;
         for (int i = 1; i < k; i++) {
-            last=last.next;
+            last = last.next;
         }
-        while(last.next!=null){
-            first=first.next;
-            last= last.next;
+        while (last.next != null) {
+            first = first.next;
+            last = last.next;
         }
         return first.val;
     }
 
     public void deleteNode(ListNode node) {
-        while (true){
-            node.val= node.next.val;
-            if(node.next.next==null){
-                node.next=null;
+        while (true) {
+            node.val = node.next.val;
+            if (node.next.next == null) {
+                node.next = null;
                 break;
             }
-            node= node.next;
+            node = node.next;
         }
     }
 
     public boolean isPalindrome(ListNode head) {
-        if(head==null)return true;
-        List<Integer>list=new ArrayList<>();
-        while (head!=null){
+        if (head == null) return true;
+        List<Integer> list = new ArrayList<>();
+        while (head != null) {
             list.add(head.val);
-            head= head.next;
+            head = head.next;
 
         }
-        for (int i = 0; i < list.size()/2; i++) {
-            if(!Objects.equals(list.get(i), list.get(list.size() - 1 - i)))return false;
+        for (int i = 0; i < list.size() / 2; i++) {
+            if (!Objects.equals(list.get(i), list.get(list.size() - 1 - i))) return false;
         }
 
         return true;
     }
 
     public ListNode dgetIntersectionNode(ListNode headA, ListNode headB) {
-        Set<ListNode>set=new HashSet<>();
-        while (headA!=null||headB!=null){
-            if(headA!=null){
-                if(!set.add(headA))return headA;
-                headA=headA.next;
+        Set<ListNode> set = new HashSet<>();
+        while (headA != null || headB != null) {
+            if (headA != null) {
+                if (!set.add(headA)) return headA;
+                headA = headA.next;
             }
-            if(headB!=null){
-                if(!set.add(headB))return headB;
-                headB=headB.next;
+            if (headB != null) {
+                if (!set.add(headB)) return headB;
+                headB = headB.next;
             }
         }
         return null;
     }
 
     public ListNode detectCycle(ListNode head) {
-        Set<ListNode>set=new HashSet<>();
-        while (head!=null){
-            if(!set.add(head))return head;
-            head= head.next;
+        Set<ListNode> set = new HashSet<>();
+        while (head != null) {
+            if (!set.add(head)) return head;
+            head = head.next;
         }
         return null;
     }
 
-    class MinStack {
+    @Test
+    public void reverseList() {
+        travelLinkedList(reverseList(buildLinkedList(1, 2, 3, 4, 5)));
+    }
 
-        private List<Integer>stack;
-
-
-        private int len=-1;
-
-        /** initialize your data structure here. */
-        public MinStack() {
-            this.stack=new ArrayList<>();
+    public ListNode reverseList(ListNode head) {
+        if (head == null || head.next == null) return head;
+        ListNode first;
+        ListNode second = null;
+        while (head != null) {
+            if (second == null) first = null;
+            else first = second;
+            second = new ListNode(head.val);
+            head = head.next;
+            second.next = first;
         }
+        return second;
+    }
 
-        public void push(int x) {
 
-            stack.add(x);
-            len++;
+    public int hammingDistance(int x, int y) {
+        int tmp = x ^ y;
+        int ans = 0;
+        while (tmp != 0) {
+            ans += tmp & 1;
+            tmp = tmp >> 1;
         }
+        return ans;
+    }
 
-        public void pop() {
-            stack.remove(len);
-            len--;
+
+    public TreeNode mergeTrees(TreeNode root1, TreeNode root2) {
+        if (root1 == null && root2 == null) return null;
+        if (root1 == null) return root2;
+        if (root2 == null) return root1;
+        ImergeTrees(root1, root2);
+        root1.val += root2.val;
+        return root1;
+    }
+
+    public void ImergeTrees(TreeNode ans, TreeNode tmp) {
+        if (ans == null || tmp == null) return;
+
+        if (ans.left != null) {
+            if (tmp.left != null) ans.left.val += tmp.left.val;
+        } else {
+            if (tmp.left != null) ans.left = new TreeNode(tmp.left.val);
         }
-
-        public int top() {
-            return stack.get(len);
+        if (ans.right != null) {
+            if (tmp.right != null) ans.right.val += tmp.right.val;
+        } else {
+            if (tmp.right != null) ans.right = new TreeNode(tmp.right.val);
         }
+        ImergeTrees(ans.left, tmp.left);
+        ImergeTrees(ans.right, tmp.right);
+    }
 
-        public int getMin() {
-            return this.min;
+    public void sortColors(int[] nums) {
+        int red=0,white=0,blue=0;
+        for (int num : nums) {
+            if(num==0)red++;
+            else if (num==1)white++;
+            else blue++;
+        }
+        for (int i = 0; i < nums.length; i++) {
+            if(red!=0){
+                nums[i]=0;
+                red--;
+                continue;
+            }
+            if(white!=0){
+                nums[i]=1;
+                white--;
+                continue;
+            }
+            if(blue!=0){
+                nums[i]=2;
+                blue--;
+            }
         }
     }
+
+
+
+
+
+
+    public int myAtoi(String s) {
+        boolean flag=false;
+        int index=0;
+        List<Character>list=new ArrayList<>();
+        for (int i = 0; i < s.length(); i++) {
+            if(s.charAt(i)<58&&s.charAt(i)>47){
+                if((i-1)>-1&&s.charAt(i-1)=='-')flag=true;
+                index=i;
+                break;
+            }
+        }
+        for (int i = index; i < s.length(); i++) {
+            if(s.charAt(i)>=58||s.charAt(i)<=47)break;
+            list.add(s.charAt(i));
+        }
+        int ans=0;
+        for (int i = 0; i < list.size(); i++) {
+            ans+= (int) ((list.get(i)-48)*Math.pow(10, list.size()-i-1));
+        }
+        return ans=flag==true?-1*ans:ans;
+    }
+
+    @Test
+    public void testd(){
+        System.out.println(myAtoi("words and 987"));
+    }
+
+
 
 
 

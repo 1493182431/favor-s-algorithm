@@ -101,6 +101,11 @@ public class BinaryTree {
 
         // 初始化一个列表，用于保存遍历序列
         while (!queue.isEmpty()) {
+//            int size = queue.size();
+//            for (int i = 0; i < size; i++) {
+//                  // 每次遍历完一层再进入下一层遍历
+//                }
+//            }
             TreeNode node = queue.poll(); // 队列出队
             list.add(node.val);           // 保存节点值
             if (node.left != null)
