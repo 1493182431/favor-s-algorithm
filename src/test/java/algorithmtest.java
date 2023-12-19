@@ -37,7 +37,7 @@ public class algorithmtest {
     }
 
     // 深度遍历
-    public static void DFS(TreeNode node, List<Integer> preOrder, List<Integer> inOrder, List<Integer> postOrder) {
+    public void DFS(TreeNode node, List<Integer> preOrder, List<Integer> inOrder, List<Integer> postOrder) {
         if (node == null) return;
 
 //        preOrder.add(0);
@@ -101,13 +101,13 @@ public class algorithmtest {
     }
 
     // 传入层序遍历数组简单构造二叉树
-    public static TreeNode buildTree(Integer... a) {
+    public TreeNode buildTree(Integer... a) {
         List<Integer> list = new ArrayList<>(Arrays.asList(a));
         return arrayToBinaryTree(list);
     }
 
     // 层序遍历数组构造二叉树
-    public static TreeNode arrayToBinaryTree(List<Integer> list) {
+    public TreeNode arrayToBinaryTree(List<Integer> list) {
 
         // 列表为空表示列表已经被创建但是没有元素，而列表为null表示列表并未被创建,两种情况都要避免。
         if (list == null || list.isEmpty()) return null;
@@ -185,7 +185,7 @@ public class algorithmtest {
         System.out.println(list);
     }
 
-    public static void travelLinkedList(ListNode head) {
+    public void travelLinkedList(ListNode head) {
         List<Integer> list = new ArrayList<>();
         while (head != null) {
             list.add(head.val);
@@ -194,7 +194,7 @@ public class algorithmtest {
         System.out.println(list);
     }
 
-    public static ListNode buildLinkedList(Integer... a) {
+    public ListNode buildLinkedList(Integer... a) {
         List<Integer> list = new ArrayList<>(Arrays.asList(a));
         if (list.isEmpty() || list == null) return null;
         ListNode head = new ListNode(list.get(0));
@@ -219,7 +219,7 @@ public class algorithmtest {
         return flag[0] == 1;
     }
 
-    public static void in1(TreeNode p, TreeNode q, int[] flag) {
+    public void in1(TreeNode p, TreeNode q, int[] flag) {
         if (p == null && q == null) return;
 
         if (p == null || q == null) {
@@ -245,7 +245,7 @@ public class algorithmtest {
         return flag[0] == 1;
     }
 
-    public static void in2(TreeNode p, TreeNode q, int[] flag) {
+    public void in2(TreeNode p, TreeNode q, int[] flag) {
         if (p == null && q == null) return;
 
         if (p == null || q == null) {
@@ -313,7 +313,7 @@ public class algorithmtest {
         return list.get(0) == 0;
     }
 
-    public static void inHasPathSum(TreeNode node, int targetSum, List<Integer> list) {
+    public void inHasPathSum(TreeNode node, int targetSum, List<Integer> list) {
         if (node == null) return;
 
         targetSum -= node.val;
@@ -506,7 +506,7 @@ public class algorithmtest {
         return list;
     }
 
-    public static void inHasPathSum(TreeNode node, int targetSum, List<Integer> tmp, List<List<Integer>> list) {
+    public void inHasPathSum(TreeNode node, int targetSum, List<Integer> tmp, List<List<Integer>> list) {
         if (node == null) return;
 
         targetSum -= node.val;
@@ -731,7 +731,7 @@ public class algorithmtest {
         return ans;
     }
 
-    public static boolean validPalindrome(String s) {
+    public boolean validPalindrome(String s) {
         int delete1 = 1, delete2 = 1;
         boolean flag1 = true, flag2 = true;
         for (int i = 0, j = s.length() - 1; i < s.length() / 2; i++) {
@@ -778,7 +778,7 @@ public class algorithmtest {
 
     // KMP 算法
     // ss: 原串(string)  pp: 匹配串(pattern)
-    public static int strStr(String ss, String pp) {
+    public int strStr(String ss, String pp) {
         if (pp.isEmpty()) return 0;
 
         // 分别读取原串和匹配串的长度
@@ -847,7 +847,7 @@ public class algorithmtest {
         return ans.stream().mapToInt(Integer::intValue).toArray();
     }
 
-    public static ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
         ListNode a = headA, b = headB;
         Set<ListNode> set = new HashSet<>();
         while (a != null || b != null) {
@@ -867,7 +867,7 @@ public class algorithmtest {
         return null;
     }
 
-    public static boolean hasCycle(ListNode head) {
+    public boolean hasCycle(ListNode head) {
         if (head == null) return false;
         Set<ListNode> set = new HashSet<>();
         ListNode now = head;
@@ -879,7 +879,7 @@ public class algorithmtest {
         return false;
     }
 
-    public static int romanToInt(String s) {
+    public int romanToInt(String s) {
         int f = 2000, l = 0, ans = 0;
         for (int i = 0; i < s.length(); i++) {
             switch (s.charAt(i)) {
@@ -919,7 +919,7 @@ public class algorithmtest {
         return ans;
     }
 
-    public static String[] findRelativeRanks(int[] score) {
+    public String[] findRelativeRanks(int[] score) {
         int n = score.length;
         String[] desc = {"Gold Medal", "Silver Medal", "Bronze Medal"};
         int[][] arr = new int[n][2];
@@ -940,7 +940,7 @@ public class algorithmtest {
         return ans;
     }
 
-    public static void reverseString(char[] s) {
+    public void reverseString(char[] s) {
         char temp;
         int len = s.length;
         for (int i = 0; i < len / 2; i++) {
@@ -950,7 +950,7 @@ public class algorithmtest {
         }
     }
 
-    public static boolean wordPattern(String pattern, String s) {
+    public boolean wordPattern(String pattern, String s) {
         Map<Character, String> map = new HashMap<>();
         String[] split = s.split(" ");
         if (pattern.length() != split.length) return false;
@@ -966,7 +966,7 @@ public class algorithmtest {
         return true;
     }
 
-    public static boolean isAnagram(String s, String t) {
+    public boolean isAnagram(String s, String t) {
         char[] scharArray = s.toCharArray();
         char[] tcharArray = t.toCharArray();
         Arrays.sort(scharArray);
@@ -974,7 +974,7 @@ public class algorithmtest {
         return Arrays.equals(scharArray, tcharArray);
     }
 
-    public static boolean isIsomorphic(String s, String t) {
+    public boolean isIsomorphic(String s, String t) {
         Map<Character, Character> map = new HashMap<>();
         for (int i = 0; i < s.length(); i++) {
             if (map.containsKey(s.charAt(i)) && map.get(s.charAt(i)) != t.charAt(i)) {
@@ -988,7 +988,7 @@ public class algorithmtest {
         return true;
     }
 
-    public static String addBinary(String a, String b) {
+    public String addBinary(String a, String b) {
         //模拟全加器
         StringBuilder ans = new StringBuilder();
         int sum = 0, carry = 0, A = 0, B = 0;
@@ -1009,7 +1009,7 @@ public class algorithmtest {
         return ans.reverse().toString();
     }
 
-    public static int lengthOfLastWord(String s) {
+    public int lengthOfLastWord(String s) {
         int lenght = 0, size = s.length() - 1;
         if (s.charAt(s.length() - 1) == ' ') {
             while (s.charAt(size) == ' ') {
@@ -1025,7 +1025,7 @@ public class algorithmtest {
         return lenght;
     }
 
-    public static boolean isValid(String s) {
+    public boolean isValid(String s) {
 
         List<Character> stack = new ArrayList<>();
         for (char c : s.toCharArray()) {
@@ -1042,7 +1042,7 @@ public class algorithmtest {
         return stack.isEmpty();
     }
 
-    public static String longestCommonPrefix(String[] strs) {
+    public String longestCommonPrefix(String[] strs) {
 
         String ans = strs[0];
         for (String str : strs) {
@@ -1059,7 +1059,7 @@ public class algorithmtest {
         return ans;
     }
 
-    public static List<Integer> findDisappearedNumbers(int[] nums) {
+    public List<Integer> findDisappearedNumbers(int[] nums) {
         List<Integer> ans = new ArrayList<>();
         List<Integer> temp = new ArrayList<>(Collections.nCopies(nums.length + 1, 0));
         temp.set(0, 1);
@@ -1073,7 +1073,7 @@ public class algorithmtest {
         return ans;
     }
 
-    public static int thirdMax(int[] nums) {
+    public int thirdMax(int[] nums) {
         Set<Integer> set = new TreeSet<>();
         for (int num : nums) {
             set.add(num);
@@ -1083,7 +1083,7 @@ public class algorithmtest {
         return array[array.length - 3];
     }
 
-    public static List<Integer> getRow(int rowIndex) {
+    public List<Integer> getRow(int rowIndex) {
         int index = rowIndex + 1;
         List<List<Integer>> lists = new ArrayList<>(index);
         for (int i = 1; i <= index; i++) {
@@ -1100,7 +1100,7 @@ public class algorithmtest {
         return lists.get(index);
     }
 
-    public static List<List<Integer>> generate(int numRows) {
+    public List<List<Integer>> generate(int numRows) {
         List<List<Integer>> lists = new ArrayList<>(numRows);
         for (int i = 1; i <= numRows; i++) {
             List<Integer> listInside = new ArrayList<>(i);
@@ -1294,7 +1294,6 @@ public class algorithmtest {
         return second;
     }
 
-
     public int hammingDistance(int x, int y) {
         int tmp = x ^ y;
         int ans = 0;
@@ -1304,7 +1303,6 @@ public class algorithmtest {
         }
         return ans;
     }
-
 
     public TreeNode mergeTrees(TreeNode root1, TreeNode root2) {
         if (root1 == null && root2 == null) return null;
@@ -1357,11 +1355,6 @@ public class algorithmtest {
         }
     }
 
-
-
-
-
-
     public int myAtoi(String s) {
         boolean flag=false;
         int index=0;
@@ -1383,13 +1376,27 @@ public class algorithmtest {
         }
         return ans=flag==true?-1*ans:ans;
     }
-
     @Test
     public void testd(){
         System.out.println(myAtoi("words and 987"));
     }
 
-
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        if(head==null||head.next==null)return null;
+        ListNode target=head;
+        ListNode tmp =head;
+        for (int i = 0; i < n; i++) {
+            tmp=tmp.next;
+        }
+        if(tmp==null)return head.next;
+        else tmp=tmp.next;
+        while (tmp!=null){
+            target=target.next;
+            tmp= tmp.next;
+        }
+        target.next= target.next.next;
+        return head;
+    }
 
 
 
