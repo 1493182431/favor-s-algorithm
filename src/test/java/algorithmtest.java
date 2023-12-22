@@ -1331,74 +1331,176 @@ public class algorithmtest {
     }
 
     public void sortColors(int[] nums) {
-        int red=0,white=0,blue=0;
+        int red = 0, white = 0, blue = 0;
         for (int num : nums) {
-            if(num==0)red++;
-            else if (num==1)white++;
+            if (num == 0) red++;
+            else if (num == 1) white++;
             else blue++;
         }
         for (int i = 0; i < nums.length; i++) {
-            if(red!=0){
-                nums[i]=0;
+            if (red != 0) {
+                nums[i] = 0;
                 red--;
                 continue;
             }
-            if(white!=0){
-                nums[i]=1;
+            if (white != 0) {
+                nums[i] = 1;
                 white--;
                 continue;
             }
-            if(blue!=0){
-                nums[i]=2;
+            if (blue != 0) {
+                nums[i] = 2;
                 blue--;
             }
         }
     }
 
     public int myAtoi(String s) {
-        boolean flag=false;
-        int index=0;
-        List<Character>list=new ArrayList<>();
+        boolean flag = false;
+        int index = 0;
+        List<Character> list = new ArrayList<>();
         for (int i = 0; i < s.length(); i++) {
-            if(s.charAt(i)<58&&s.charAt(i)>47){
-                if((i-1)>-1&&s.charAt(i-1)=='-')flag=true;
-                index=i;
+            if (s.charAt(i) < 58 && s.charAt(i) > 47) {
+                if ((i - 1) > -1 && s.charAt(i - 1) == '-') flag = true;
+                index = i;
                 break;
             }
         }
         for (int i = index; i < s.length(); i++) {
-            if(s.charAt(i)>=58||s.charAt(i)<=47)break;
+            if (s.charAt(i) >= 58 || s.charAt(i) <= 47) break;
             list.add(s.charAt(i));
         }
-        int ans=0;
+        int ans = 0;
         for (int i = 0; i < list.size(); i++) {
-            ans+= (int) ((list.get(i)-48)*Math.pow(10, list.size()-i-1));
+            ans += (int) ((list.get(i) - 48) * Math.pow(10, list.size() - i - 1));
         }
-        return ans=flag==true?-1*ans:ans;
+        return ans = flag == true ? -1 * ans : ans;
     }
+
     @Test
-    public void testd(){
+    public void testd() {
         System.out.println(myAtoi("words and 987"));
     }
 
     public ListNode removeNthFromEnd(ListNode head, int n) {
-        if(head==null||head.next==null)return null;
-        ListNode target=head;
-        ListNode tmp =head;
+        if (head == null || head.next == null) return null;
+        ListNode target = head;
+        ListNode tmp = head;
         for (int i = 0; i < n; i++) {
-            tmp=tmp.next;
+            tmp = tmp.next;
         }
-        if(tmp==null)return head.next;
-        else tmp=tmp.next;
-        while (tmp!=null){
-            target=target.next;
-            tmp= tmp.next;
+        if (tmp == null) return head.next;
+        else tmp = tmp.next;
+        while (tmp != null) {
+            target = target.next;
+            tmp = tmp.next;
         }
-        target.next= target.next.next;
+        target.next = target.next.next;
         return head;
     }
 
+    //    全加器：A，B，Carry0，Sum，Carry1
+//    Sum = A ^ B ^ Carry0
+//    Carry1 = A & Carry0 | A & B | B & Carry0 或 Carry1 = (A & B) | Carry0 & (A ^ B)
+    public int getSum(int a, int b) {
+        int Sum = 0;
+        int Carry = 0;
+        int ans = 0;
+        int A = 0;
+        int B = 0;
+        for (int i = 0; i < 32; i++) {
+            A = a & 1;
+            B = b & 1;
+            Sum = A ^ B ^ Carry;
+            Carry = A & Carry | A & B | B & Carry;
+            ans ^= Sum << i;
+            a >>= 1;
+            b >>= 1;
+        }
+        return ans;
+    }
 
+    @Test
+    public void reverse() {
+        System.out.println(reverse(-2147483648));
+    }
+    public int reverse(int x) {
+        long ans = 0;
+        while (x != 0) {
+            ans *= 10;// ans每轮左移一位
+            ans += x % 10;// 加上x末位数字
+            x /= 10;// x右移一位
+        }
+        if (ans > Integer.MAX_VALUE || ans < Integer.MIN_VALUE) return 0;
+        return (int) ans;
+    }
+
+    @Test
+    public void searchRange() {
+        int[] nums = new int[]{5, 7, 7, 8, 8, 10};
+        System.out.println(Arrays.toString(searchRange(nums, 10)));
+    }
+    public int[] searchRange(int[] nums, int target) {
+        int[] ans = new int[]{-1, -1};
+        if (nums.length == 0) return ans;
+        int left = 0;
+        int right = nums.length - 1;
+        int mid;
+        // 二分查找
+        while (left <= right) {
+            mid = (left + right) / 2;
+            if (nums[mid] < target) {
+                left = mid + 1;
+            } else if (nums[mid] > target) {
+                right = mid - 1;
+            } else {
+                int start = mid;
+                int end = mid;
+                while (start > 0 && nums[start - 1] == target) {
+                    start--;
+                }
+                while (end < nums.length - 1 && nums[end + 1] == target) {
+                    end++;
+                }
+                ans[0] = start;
+                ans[1] = end;
+                return ans;
+            }
+        }
+        return ans;
+    }
+
+    @Test
+    public void countAndSay(){
+        System.out.println(countAndSay(75));
+    }
+    public String countAndSay(int n) {
+        if (n == 1) return "1";
+        List<StringBuilder> sequences = new ArrayList<>();
+        sequences.add(new StringBuilder("1"));
+
+        for (int i = 1; i < n; i++) {
+            StringBuilder current = sequences.get(i - 1);
+            StringBuilder next = new StringBuilder();
+            int ele = 0;
+            int index = 0;
+            current.append(' ');
+
+            while (index < current.length()) {
+                if (current.charAt(ele) == current.charAt(index)) {
+                    index++;
+                } else {
+                    next.append((char) (index - ele + 48));
+                    next.append(current.charAt(ele));
+                    ele = index;
+                }
+            }
+
+            sequences.add(next);
+        }
+
+        return sequences.get(n - 1).toString();
+    }
 
 
 }
