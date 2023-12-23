@@ -1502,6 +1502,103 @@ public class algorithmtest {
         return sequences.get(n - 1).toString();
     }
 
+    @Test
+    public void longestConsecutive(){
+        int[] nums=new int[]{100,4,200,1,3,2};
+        System.out.println(longestConsecutive(nums));
+    }
+    public int longestConsecutive(int[] nums) {
+        if(nums.length==0)return 0;
+        int last=Integer.MIN_VALUE;
+        int tmp=0;
+        int ans=0;
+        Arrays.sort(nums);
+        for (int i = 0; i < nums.length; i++) {
+            if(last+1==nums[i]){
+                last=nums[i];
+                tmp++;
+            }
+            else if(last+1<nums[i]){
+                ans=Math.max(ans,tmp);
+                tmp=0;
+                last=nums[i];
+            }
+
+        }
+        ans=Math.max(ans,tmp);
+        return ++ans;
+    }
+
+    public int findKthLargest(int[] nums, int k) {
+        PriorityQueue<Integer>heap=new PriorityQueue<>();
+        for (int i = 0; i < nums.length; i++) {
+            if(k==0){
+                if(nums[i]>heap.peek()){
+                    heap.remove(heap.peek());
+                    heap.add(nums[i]);
+                }
+            }else{
+                heap.add(nums[i]);
+                k--;
+            }
+        }
+
+        return heap.peek();
+    }
+
+
+    // 自定义排序
+    @Test
+    public void Comparator(){
+        ArrayList<Integer> arrayList = new ArrayList<Integer>();
+        arrayList.add(-1);
+        arrayList.add(3);
+        arrayList.add(3);
+        arrayList.add(-5);
+        arrayList.add(7);
+        arrayList.add(4);
+        arrayList.add(-9);
+        arrayList.add(-7);
+        System.out.println("原始数组:");
+        System.out.println(arrayList);
+// void sort(List list),按自然排序的升序排序
+        Collections.sort(arrayList);
+        System.out.println("Collections.sort(arrayList):");
+        System.out.println(arrayList);
+// 定制排序的用法
+        Collections.sort(arrayList, new Comparator<Integer>() {
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                return o2-o1;
+            }
+        });
+        System.out.println("定制排序后：");
+        System.out.println(arrayList);
+
+        Set<Integer>set=new TreeSet<>(new Comparator<Integer>() {
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                return o2-o1;
+            }
+        });
+        set.add(1);
+        set.add(2);
+        set.add(5);
+        set.add(6);
+        set.add(0);
+        set.add(9);
+        set.add(7);
+        System.out.println(set);
+    }
+
+
+
+
+
+
+
+
+
 
 }
 
