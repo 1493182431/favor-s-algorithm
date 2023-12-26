@@ -1,7 +1,9 @@
 import org.junit.Test;
 import org.w3c.dom.Node;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 public class algorithmtest {
     // 树节点
@@ -1424,6 +1426,7 @@ public class algorithmtest {
     public void reverse() {
         System.out.println(reverse(-2147483648));
     }
+
     public int reverse(int x) {
         long ans = 0;
         while (x != 0) {
@@ -1440,6 +1443,7 @@ public class algorithmtest {
         int[] nums = new int[]{5, 7, 7, 8, 8, 10};
         System.out.println(Arrays.toString(searchRange(nums, 10)));
     }
+
     public int[] searchRange(int[] nums, int target) {
         int[] ans = new int[]{-1, -1};
         if (nums.length == 0) return ans;
@@ -1471,9 +1475,10 @@ public class algorithmtest {
     }
 
     @Test
-    public void countAndSay(){
+    public void countAndSay() {
         System.out.println(countAndSay(75));
     }
+
     public String countAndSay(int n) {
         if (n == 1) return "1";
         List<StringBuilder> sequences = new ArrayList<>();
@@ -1503,41 +1508,41 @@ public class algorithmtest {
     }
 
     @Test
-    public void longestConsecutive(){
-        int[] nums=new int[]{100,4,200,1,3,2};
+    public void longestConsecutive() {
+        int[] nums = new int[]{100, 4, 200, 1, 3, 2};
         System.out.println(longestConsecutive(nums));
     }
+
     public int longestConsecutive(int[] nums) {
-        if(nums.length==0)return 0;
-        int last=Integer.MIN_VALUE;
-        int tmp=0;
-        int ans=0;
+        if (nums.length == 0) return 0;
+        int last = Integer.MIN_VALUE;
+        int tmp = 0;
+        int ans = 0;
         Arrays.sort(nums);
         for (int i = 0; i < nums.length; i++) {
-            if(last+1==nums[i]){
-                last=nums[i];
+            if (last + 1 == nums[i]) {
+                last = nums[i];
                 tmp++;
-            }
-            else if(last+1<nums[i]){
-                ans=Math.max(ans,tmp);
-                tmp=0;
-                last=nums[i];
+            } else if (last + 1 < nums[i]) {
+                ans = Math.max(ans, tmp);
+                tmp = 0;
+                last = nums[i];
             }
 
         }
-        ans=Math.max(ans,tmp);
+        ans = Math.max(ans, tmp);
         return ++ans;
     }
 
     public int findKthLargest(int[] nums, int k) {
-        PriorityQueue<Integer>heap=new PriorityQueue<>();
+        PriorityQueue<Integer> heap = new PriorityQueue<>();
         for (int i = 0; i < nums.length; i++) {
-            if(k==0){
-                if(nums[i]>heap.peek()){
+            if (k == 0) {
+                if (nums[i] > heap.peek()) {
                     heap.remove(heap.peek());
                     heap.add(nums[i]);
                 }
-            }else{
+            } else {
                 heap.add(nums[i]);
                 k--;
             }
@@ -1549,7 +1554,7 @@ public class algorithmtest {
 
     // 自定义排序
     @Test
-    public void Comparator(){
+    public void Comparator() {
         ArrayList<Integer> arrayList = new ArrayList<Integer>();
         arrayList.add(-1);
         arrayList.add(3);
@@ -1569,18 +1574,16 @@ public class algorithmtest {
         Collections.sort(arrayList, new Comparator<Integer>() {
             @Override
             public int compare(Integer o1, Integer o2) {
-                return o2-o1;
+                return o2 - o1;
             }
         });
+        // lambda简化
+        Collections.sort(arrayList, (o1, o2) -> o2 - o1);
         System.out.println("定制排序后：");
         System.out.println(arrayList);
 
-        Set<Integer>set=new TreeSet<>(new Comparator<Integer>() {
-            @Override
-            public int compare(Integer o1, Integer o2) {
-                return o2-o1;
-            }
-        });
+        // lambda简化
+        Set<Integer> set = new TreeSet<>((o1, o2) -> o2 - o1);
         set.add(1);
         set.add(2);
         set.add(5);
@@ -1592,13 +1595,252 @@ public class algorithmtest {
     }
 
 
+    public int islandPerimeter(int[][] grid) {
+        int ans = 0;
+        int row = grid[0].length;
+        int column = grid.length;
+
+        int count;
+        for (int i = 0; i < column; i++) {
+            for (int j = 0; j < row; j++) {
+                count = 0;
+                if (grid[i][j] == 1) {
+                    if (i == 0 || grid[i - 1][j] == 0) count++;
+                    if (j == 0 || grid[i][j - 1] == 0) count++;
+                    if ((i == column - 1) || grid[i + 1][j] == 0) count++;
+                    if ((j == row - 1) || grid[i][j + 1] == 0) count++;
+                }
+                ans += count;
+            }
+        }
+        return ans;
+    }
+
+
+    //    int[][] matrix=new int[row][column];
+//    row=matrix.length;
+//    column=matrix[0].length;
+//    row表示矩阵的行数，column表示矩阵的列数
+//    [[1,2],[3,4],[5,6],[7,8],[9,10]] row=5,column=2
+    public int[][] matrixReshape(int[][] mat, int r, int c) {
+        int m = mat.length;
+        int n = mat[0].length;
+        if (m * n != r * c) {
+            return mat;
+        }
+
+        int[][] ans = new int[r][c];
+        for (int x = 0; x < m * n; ++x) {
+            ans[x / c][x % c] = mat[x / n][x % n];
+        }
+        return ans;
+
+    }
+
+    @Test
+    public void permute() {
+        int[] nums = {1, 2, 3};
+        System.out.println(permute(nums));
+    }
+    public List<List<Integer>> permute(int[] nums) {
+        List<List<Integer>> res = new ArrayList<>();
+        List<Integer> tmp = new ArrayList<>();
+        int[] used = new int[nums.length];
+        backtrackpermute(tmp, nums, used, res);
+        return res;
+    }
+    // TODO int[] used, i->start, i+1->start, Set<Integer>set 区别
+    public void backtrackpermute(List<Integer> tmp, int[] nums, int[] used, List<List<Integer>> res) {
+        if (tmp.size() == nums.length) res.add(new ArrayList<>(tmp));
+        for (int i = 0; i < nums.length; i++) {
+            if (used[i] == 0) {
+                tmp.add(nums[i]);
+                used[i] = 1;
+                backtrackpermute(tmp, nums, used, res);
+                tmp.remove(tmp.size() - 1);
+                used[i] = 0;
+            }
+        }
+    }
+
+    //    排列问题，讲究顺序（即 [2, 2, 3] 与 [2, 3, 2] 视为不同列表时），需要记录哪些数字已经使用过，此时用 used 数组。确保每次递归不会与上次递归选到相同的元素。
+    @Test
+    public void permuteUnique() {
+        int[] nums = {1, 1, 2};
+        System.out.println(permuteUnique(nums));
+    }
+    public List<List<Integer>> permuteUnique(int[] nums) {
+        List<Integer> tmp = new ArrayList<>();
+        Set<Integer> visited = new HashSet<>();
+        int[] used = new int[nums.length];
+        List<List<Integer>> res = new ArrayList<>();
+        Arrays.sort(nums);
+        backtrackpermuteUnique(tmp, nums, used, res);
+        return res;
+    }
+    public void backtrackpermuteUnique(List<Integer> tmp, int[] nums, int[] used, List<List<Integer>> res) {
+        if (tmp.size() == nums.length) res.add(new ArrayList<>(tmp));
+        for (int i = 0; i < nums.length; i++) {
+            if (used[i] == 1 || (i > 0 && nums[i] == nums[i - 1] && used[i - 1] == 0)) {
+                continue;
+            }
+            tmp.add(nums[i]);
+            used[i] = 1;
+            backtrackpermuteUnique(tmp, nums, used, res);
+            tmp.remove(tmp.size() - 1);
+            used[i] = 0;
+        }
+    }
+
+
+//    组合问题，不讲究顺序（即 [2, 2, 3] 与 [2, 3, 2] 视为相同列表时），需要按照某种顺序搜索，此时使用 begin 变量。
+//    每一轮for循环的选择应当跳过上一轮for循环已经选完的节点，避免产生重复的子集，即每一轮for循环以index=begin开始。
+    @Test
+    public void combinationSum() {
+        int[] nums = {10,1,2,7,6,1,5};
+        System.out.println(combinationSum(nums, 8));
+    }
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        List<List<Integer>> res = new ArrayList<>();
+        dfs(candidates, 0, target, new LinkedList<Integer>(), res);
+        return res;
+    }
+    public void dfs(int[] candidates, int idx, int target, LinkedList<Integer> path, List<List<Integer>> res) {
+        if(target<0) {
+            return;
+        }
+        if(target==0) {
+            res.add(new ArrayList(path));
+            return;
+        }
+        for(int i=idx;i<candidates.length;i++) {
+            path.add(candidates[i]);
+            dfs(candidates, i, target-candidates[i], path, res);
+            path.removeLast();
+        }
+    }
+
+    @Test
+    public void combinationSum2() {
+        int[] nums = {10,1,2,7,6,1,5};
+        System.out.println(combinationSum2(nums, 8));
+    }
+    public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+        List<List<Integer>> res = new ArrayList<>();
+        Arrays.sort(candidates);
+        int[]used=new int[candidates.length];
+        dfscombinationSum2(used,candidates, 0, target, new LinkedList<Integer>(), res);
+        return res;
+    }
+    public void dfscombinationSum2(int[]used,int[] candidates, int idx, int target, LinkedList<Integer> path, List<List<Integer>> res) {
+        if(target<0) {
+            return;
+        }
+        if(target==0) {
+            res.add(new ArrayList(path));
+            return;
+        }
+        Set<Integer>set=new HashSet<>();
+        for(int i=idx;i<candidates.length;i++) {
+            if(!set.contains(candidates[i])&& used[i]==0){
+                set.add(candidates[i]);
+                used[i]=1;
+                path.add(candidates[i]);
+                dfscombinationSum2(used,candidates, i, target-candidates[i], path, res);
+                path.removeLast();
+                used[i]=0;
+            }
+
+        }
+    }
 
 
 
+//    /* 回溯算法框架 */
+//    排列问题，讲究顺序（即 [2, 2, 3] 与 [2, 3, 2] 视为不同列表时），需要记录哪些数字已经使用过，此时用 used 数组。确保每次递归不会与上次递归选到相同的元素。
+//    组合问题，不讲究顺序（即 [2, 2, 3] 与 [2, 3, 2] 视为相同列表时），需要按照某种顺序搜索，此时使用 begin 变量。
+//    每一轮for循环的选择应当跳过上一轮for循环已经选完的节点，避免产生重复的子集，即每一轮for循环以index=begin开始。
+//    重复问题，若要去除每一轮for循环中的重复元素，可使用Set<Integer>set=new HashSet<>()，或者提前对待循环节点排序
+//
+//
+//    /**
+//     *
+//     * @param state 临时变量用于存储尝试和回退
+//     * @param choices 需要遍历的数据结构
+//     * @param res 解答结果
+//     */
+//    void backtrack(State state, List<Choice> choices, List<State> res) {
+//        // 判断是否为解
+//        if (isSolution(state)) {
+//            // 记录解，将当前解答加入到res中
+//            recordSolution(state, res);
+//            // 只需记录第一个解则加return，若需全部遍历找到所有解则需加return
+//            // return;
+//        }
+//        // 遍历所有选择
+//        for (Choice choice : choices) {
+//            // 剪枝：判断选择是否合法
+//            if (isValid(state, choice)) {
+//                // 尝试：做出选择，更新状态
+//                makeChoice(state, choice);
+//                // 第一次经过某节点
+//                firstTravel();
+//
+//                // 递归调用
+//                backtrack(state, choices, res);
+//
+//                // 回退：撤销选择，恢复到之前的状态
+//                undoChoice(state, choice);
+//                // 最后一次经过某节点
+//                lastTravel();
+//            }
+//        }
+//    }
 
+    @Test
+    public void test1026() {
+        TreeNode root = buildTree(1, 7, 2, 4, 5, 3, 7, 8, 9, 7, 10, 11, 7);
+        List<Integer> state = new ArrayList<>();
+        List<TreeNode> choices = new ArrayList<>();
+        choices.add(root);
+        List<List<Integer>> res = new ArrayList<>();
+        backtrack(state, choices, res);
+        System.out.println(res);
+    }
 
+    /* 回溯算法：find all the path of Integer 7 in a binary tree*/
+    void backtrack(List<Integer> state, List<TreeNode> choices, List<List<Integer>> res) {
+        if (!state.isEmpty() && state.get(state.size() - 1) == 7) {
+            res.add(new ArrayList<>(state));
+        }
+        for (TreeNode choice : choices) {
+            if (choice != null && choice.val != 3) {
+                state.add(choice.val);
+                backtrack(state, Arrays.asList(choice.left, choice.right), res);
+                state.remove(state.size() - 1);
+            }
+        }
+    }
 
-
-
+    @Test
+    public void combine(){
+        System.out.println(combine(4, 2));
+    }
+    List<List<Integer>>ans=new ArrayList<>();
+    public List<List<Integer>> combine(int n, int k) {
+        backTrackCombine(new ArrayList<>(), n,k,1);
+        return ans;
+    }
+    public void backTrackCombine(List<Integer>tmp,int n,int k,int start){
+        if(k<=0){
+            ans.add(new ArrayList<>(tmp));
+            return;
+        }
+        for (int i = start; i <= n-k+1; i++) {
+            tmp.add(i);
+            backTrackCombine(tmp,n,k-1,i+1);
+            tmp.remove(tmp.size()-1);
+        }
+    }
 }
 
