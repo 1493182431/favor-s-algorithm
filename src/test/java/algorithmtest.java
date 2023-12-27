@@ -1616,7 +1616,6 @@ public class algorithmtest {
         return ans;
     }
 
-
     //    int[][] matrix=new int[row][column];
 //    row=matrix.length;
 //    column=matrix[0].length;
@@ -1642,6 +1641,7 @@ public class algorithmtest {
         int[] nums = {1, 2, 3};
         System.out.println(permute(nums));
     }
+
     public List<List<Integer>> permute(int[] nums) {
         List<List<Integer>> res = new ArrayList<>();
         List<Integer> tmp = new ArrayList<>();
@@ -1649,7 +1649,7 @@ public class algorithmtest {
         backtrackpermute(tmp, nums, used, res);
         return res;
     }
-    // TODO int[] used, i->start, i+1->start, Set<Integer>set 区别
+
     public void backtrackpermute(List<Integer> tmp, int[] nums, int[] used, List<List<Integer>> res) {
         if (tmp.size() == nums.length) res.add(new ArrayList<>(tmp));
         for (int i = 0; i < nums.length; i++) {
@@ -1669,6 +1669,7 @@ public class algorithmtest {
         int[] nums = {1, 1, 2};
         System.out.println(permuteUnique(nums));
     }
+
     public List<List<Integer>> permuteUnique(int[] nums) {
         List<Integer> tmp = new ArrayList<>();
         Set<Integer> visited = new HashSet<>();
@@ -1678,6 +1679,7 @@ public class algorithmtest {
         backtrackpermuteUnique(tmp, nums, used, res);
         return res;
     }
+
     public void backtrackpermuteUnique(List<Integer> tmp, int[] nums, int[] used, List<List<Integer>> res) {
         if (tmp.size() == nums.length) res.add(new ArrayList<>(tmp));
         for (int i = 0; i < nums.length; i++) {
@@ -1693,67 +1695,70 @@ public class algorithmtest {
     }
 
 
-//    组合问题，不讲究顺序（即 [2, 2, 3] 与 [2, 3, 2] 视为相同列表时），需要按照某种顺序搜索，此时使用 begin 变量。
+    //    组合问题，不讲究顺序（即 [2, 2, 3] 与 [2, 3, 2] 视为相同列表时），需要按照某种顺序搜索，此时使用 begin 变量。
 //    每一轮for循环的选择应当跳过上一轮for循环已经选完的节点，避免产生重复的子集，即每一轮for循环以index=begin开始。
     @Test
     public void combinationSum() {
-        int[] nums = {10,1,2,7,6,1,5};
+        int[] nums = {10, 1, 2, 7, 6, 1, 5};
         System.out.println(combinationSum(nums, 8));
     }
+
     public List<List<Integer>> combinationSum(int[] candidates, int target) {
         List<List<Integer>> res = new ArrayList<>();
         dfs(candidates, 0, target, new LinkedList<Integer>(), res);
         return res;
     }
+
     public void dfs(int[] candidates, int idx, int target, LinkedList<Integer> path, List<List<Integer>> res) {
-        if(target<0) {
+        if (target < 0) {
             return;
         }
-        if(target==0) {
+        if (target == 0) {
             res.add(new ArrayList(path));
             return;
         }
-        for(int i=idx;i<candidates.length;i++) {
+        for (int i = idx; i < candidates.length; i++) {
             path.add(candidates[i]);
-            dfs(candidates, i, target-candidates[i], path, res);
+            dfs(candidates, i, target - candidates[i], path, res);
             path.removeLast();
         }
     }
 
     @Test
     public void combinationSum2() {
-        int[] nums = {10,1,2,7,6,1,5};
+        int[] nums = {10, 1, 2, 7, 6, 1, 5};
         System.out.println(combinationSum2(nums, 8));
     }
+
     public List<List<Integer>> combinationSum2(int[] candidates, int target) {
         List<List<Integer>> res = new ArrayList<>();
         Arrays.sort(candidates);
-        int[]used=new int[candidates.length];
-        dfscombinationSum2(used,candidates, 0, target, new LinkedList<Integer>(), res);
+        int[] used = new int[candidates.length];
+        dfscombinationSum2(used, candidates, 0, target, new LinkedList<Integer>(), res);
         return res;
     }
-    public void dfscombinationSum2(int[]used,int[] candidates, int idx, int target, LinkedList<Integer> path, List<List<Integer>> res) {
-        if(target<0) {
+
+    public void dfscombinationSum2(int[] used, int[] candidates, int idx, int target, LinkedList<Integer> path, List<List<Integer>> res) {
+        if (target < 0) {
             return;
         }
-        if(target==0) {
+        if (target == 0) {
             res.add(new ArrayList(path));
             return;
         }
-        Set<Integer>set=new HashSet<>();
-        for(int i=idx;i<candidates.length;i++) {
-            if(!set.contains(candidates[i])&& used[i]==0){
+        Set<Integer> set = new HashSet<>();
+        for (int i = idx; i < candidates.length; i++) {
+            if (!set.contains(candidates[i]) && used[i] == 0) {
                 set.add(candidates[i]);
-                used[i]=1;
+                used[i] = 1;
                 path.add(candidates[i]);
-                dfscombinationSum2(used,candidates, i, target-candidates[i], path, res);
+                dfscombinationSum2(used, candidates, i, target - candidates[i], path, res);
                 path.removeLast();
-                used[i]=0;
+                used[i] = 0;
             }
 
         }
     }
-
 
 
 //    /* 回溯算法框架 */
@@ -1823,24 +1828,139 @@ public class algorithmtest {
     }
 
     @Test
-    public void combine(){
+    public void combine() {
         System.out.println(combine(4, 2));
     }
-    List<List<Integer>>ans=new ArrayList<>();
+
+    List<List<Integer>> ans = new ArrayList<>();
+
     public List<List<Integer>> combine(int n, int k) {
-        backTrackCombine(new ArrayList<>(), n,k,1);
+        backTrackCombine(new ArrayList<>(), n, k, 1);
         return ans;
     }
-    public void backTrackCombine(List<Integer>tmp,int n,int k,int start){
-        if(k<=0){
+
+    public void backTrackCombine(List<Integer> tmp, int n, int k, int start) {
+        if (k <= 0) {
             ans.add(new ArrayList<>(tmp));
             return;
         }
-        for (int i = start; i <= n-k+1; i++) {
+        for (int i = start; i <= n - k + 1; i++) {
             tmp.add(i);
-            backTrackCombine(tmp,n,k-1,i+1);
-            tmp.remove(tmp.size()-1);
+            backTrackCombine(tmp, n, k - 1, i + 1);
+            tmp.remove(tmp.size() - 1);
         }
     }
+
+    @Test
+    public void combinationSum3() {
+        System.out.println(combinationSum3(3, 7));
+    }
+
+    public List<List<Integer>> combinationSum3(int k, int n) {
+        List<List<Integer>> ans = new ArrayList<>();
+        bccombinationSum3(ans, new ArrayList<>(), k, n, new int[9], 1);
+        return ans;
+    }
+
+    public void bccombinationSum3(List<List<Integer>> ans, List<Integer> tmp, int k, int n, int[] used, int start) {
+        if (k == 0 && n == 0) {
+            ans.add(new ArrayList<>(tmp));
+            return;
+        }
+        if (k < 0 || n < 0) return;
+        for (int i = start; i < 10; i++) {
+            if (used[i - 1] == 0) {
+                used[i - 1] = 1;
+                tmp.add(i);
+                bccombinationSum3(ans, tmp, k - 1, n - i, used, i);
+                tmp.remove(tmp.size() - 1);
+                used[i - 1] = 0;
+            }
+        }
+    }
+
+    @Test
+    public void letterCombinations() {
+        System.out.println(letterCombinations("234567"));
+    }
+
+    public List<String> letterCombinations(String digits) {
+        if (digits.isEmpty()) return new ArrayList<>();
+        List<String> ans = new ArrayList<>();
+        Map<Character, String> map = new HashMap<>();
+        map.put('2', "abc");
+        map.put('3', "def");
+        map.put('4', "ghi");
+        map.put('5', "jkl");
+        map.put('6', "mno");
+        map.put('7', "pqrs");
+        map.put('8', "tuv");
+        map.put('9', "wxyz");
+        btletterCombinations(ans, new StringBuilder(), digits, map, 0);
+        return ans;
+    }
+
+    public void btletterCombinations(List<String> ans, StringBuilder tmp, String digits, Map<Character, String> map, int count) {
+        if (tmp.length() == digits.length()) {
+            ans.add(new String(tmp));
+            return;
+        }
+        for (int i = 0; i < map.get(digits.charAt(count)).length(); i++) {
+            tmp.append(map.get(digits.charAt(count)).charAt(i));
+            btletterCombinations(ans, tmp, digits, map, count + 1);
+            tmp.deleteCharAt(tmp.length() - 1);
+        }
+    }
+
+    @Test
+    public void subsets() {
+        System.out.println(subsets(new int[]{1, 2, 2}));
+    }
+
+    public List<List<Integer>> subsets(int[] nums) {
+        List<List<Integer>> ans = new ArrayList<>();
+        backtrackSubsets(new ArrayList<>(), ans, nums, nums[0], 0);
+        return ans;
+    }
+
+    public void backtrackSubsets(List<Integer> tmp, List<List<Integer>> ans, int[] nums, int next, int count) {
+        if (count == nums.length) {
+            ans.add(new ArrayList<>(tmp));
+            return;
+        }
+        for (int i = 0; i < 2; i++) {
+            if (i == 0) {
+                tmp.add(next);
+            }
+            backtrackSubsets(tmp, ans, nums, count < nums.length - 1 ? nums[count + 1] : 0, count + 1);
+            if (i == 0) tmp.remove(tmp.size() - 1);
+        }
+    }
+
+    @Test
+    public void subsetsWithDup() {
+        System.out.println(subsetsWithDup(new int[]{1, 1}));
+    }
+
+    public List<List<Integer>> subsetsWithDup(int[] nums) {
+        List<List<Integer>> ans = new ArrayList<>();
+        Arrays.sort(nums);
+        btsubsetsWithDup(new ArrayList<>(), ans, nums, nums[0], 0, 0);
+        return ans;
+    }
+
+    public void btsubsetsWithDup(List<Integer> tmp, List<List<Integer>> ans, int[] nums, int next, int count, int start) {
+        if (count == nums.length) {
+            ans.add(new ArrayList<>(tmp));
+            return;
+        }
+        for (int i = count != 0 && nums[count] == nums[count - 1] ? start : 0; i < 2; i++) {
+            if (i == 0) tmp.add(next);
+            btsubsetsWithDup(tmp, ans, nums, count < nums.length - 1 ? nums[count + 1] : 0, count + 1, i);
+            if (i == 0) tmp.remove(tmp.size() - 1);
+        }
+    }
+
+
 }
 
