@@ -1961,6 +1961,123 @@ public class algorithmtest {
         }
     }
 
+    public int removeDuplicates(int[] nums) {
+        if (nums.length <= 2) {
+            return nums.length;
+        }
+
+        int current = 2;
+        for (int i = 2; i < nums.length; i++) {
+            if (nums[current - 2] != nums[i]) {
+                nums[current] = nums[i];
+                current++;
+            }
+        }
+        return current;
+    }
+
+    public ListNode sortList(ListNode head) {
+        ListNode node = head;
+        List<Integer> list = new ArrayList<>();
+        while (node != null) {
+            list.add(node.val);
+            node = node.next;
+        }
+        Collections.sort(list);
+        node = head;
+        int i = 0;
+        while (node != null) {
+            node.val = list.get(i);
+            node = node.next;
+            i++;
+        }
+        return head;
+    }
+
+//    public int reverseBits(int n) {
+//        int ans = 0;
+//        for (int i = 0; i < 32; i++) {
+//            ans ^= (((1 << i) & n) >>> i) << 31 - i;
+//        }
+//        return ans;
+//    }
+
+
+    //颠倒给定的 32 位无符号整数的二进制位
+    private static final int M1 = 0x55555555; // 01010101010101010101010101010101
+    private static final int M2 = 0x33333333; // 00110011001100110011001100110011
+    private static final int M4 = 0x0f0f0f0f; // 00001111000011110000111100001111
+    private static final int M8 = 0x00ff00ff; // 00000000111111110000000011111111
+
+    public int reverseBits(int n) {
+        n = n >>> 1 & M1 | (n & M1) << 1;
+        n = n >>> 2 & M2 | (n & M2) << 2;
+        n = n >>> 4 & M4 | (n & M4) << 4;
+        n = n >>> 8 & M8 | (n & M8) << 8;
+        return n >>> 16 | n << 16;
+    }
+
+    //
+//- 第一次位运算：n = n >>> 1 & M1 | (n & M1) << 1
+//    - n >>> 1将n向右移动1位，同时将高位补0
+//    - n & M1将n与M1按位与，提取出n中奇数位的值
+//    - (n & M1) << 1将奇数位的值向左移动1位
+//    - 最后将这两个值合并，得到偶数位和奇数位交换的结果
+//
+//- 第二次位运算：n = n >>> 2 & M2 | (n & M2) << 2
+//    - n >>> 2将n向右移动2位，同时将高位补0
+//    - n & M2将n与M2按位与，提取出n中每2位的值
+//    - (n & M2) << 2将每2位的值向左移动2位
+//    - 最后将这两个值合并，得到相邻2位分别在4位之间交换的结果
+//
+//- 第三次位运算：n = n >>> 4 & M4 | (n & M4) << 4
+//    - n >>> 4将n向右移动4位，同时将高位补0
+//    - n & M4将n与M4按位与，提取出n中每4位的值
+//    - (n & M4) << 4将每4位的值向左移动4位
+//    - 最后将这两个值合并，得到相邻4位分别在8位之间交换的结果
+//
+//- 第四次位运算：n = n >>> 8 & M8 | (n & M8) << 8
+//    - n >>> 8将n向右移动8位，同时将高位补0
+//    - n & M8将n与M8按位与，提取出n中每8位的值
+//    - (n & M8) << 8将每8位的值向左移动8位
+//    - 最后将这两个值合并，得到相邻8位分别在16位之间交换的结果
+//
+//- 最后一步：return n >>> 16 | n << 16
+//    - n >>> 16将n向右移动16位，同时将高位补0
+//    - n << 16将n向左移动16位，同时将低位补0
+//    - 最后将这两个值合并返回，得到完全反转后的结果
+    @Test
+    public void syutdi() {
+        System.out.println(reverseBits(12345678));
+    }
+
+
+    public List<Integer> spiralOrder(int[][] matrix) {
+        List<Integer> ans = new ArrayList<>();
+        int m = matrix.length;
+        int n = matrix[0].length;
+        int r1 = 0, r2 = m - 1; // 定义上下边界
+        int c1 = 0, c2 = n - 1; // 定义左右边界
+        while (r1 <= r2 && c1 <= c2) {
+            for (int c = c1; c <= c2; c++) ans.add(matrix[r1][c]);
+            for (int r = r1 + 1; r <= r2; r++) ans.add(matrix[r][c2]);
+            if (r1 < r2 && c1 < c2) {
+                for (int c = c2 - 1; c > c1; c--) ans.add(matrix[r2][c]);
+                for (int r = r2; r > r1; r--) ans.add(matrix[r][c1]);
+            }
+            r1++;
+            r2--;
+            c1++;
+            c2--;
+        }
+        return ans;
+    }
+
+    @Test
+    public void sdkgnjk(){
+        int[][] matrix=new int[][]{};
+        System.out.println(spiralOrder(matrix));
+    }
 
 }
 
