@@ -2051,7 +2051,6 @@ public class algorithmtest {
         System.out.println(reverseBits(12345678));
     }
 
-
     public List<Integer> spiralOrder(int[][] matrix) {
         List<Integer> ans = new ArrayList<>();
         int m = matrix.length;
@@ -2074,10 +2073,64 @@ public class algorithmtest {
     }
 
     @Test
-    public void sdkgnjk(){
-        int[][] matrix=new int[][]{};
+    public void sdkgnjk() {
+        int[][] matrix = new int[][]{};
         System.out.println(spiralOrder(matrix));
     }
+
+
+    public void qdeleteNode(ListNode node) {
+        ListNode first = node;
+        ListNode second = node.next;
+        while (second.next != null) {
+            first.val = second.val;
+            first = second;
+            second = second.next;
+        }
+        first.val = second.val;
+        first.next = null;
+    }
+
+    public ListNode oddEvenList(ListNode head) {
+        if(head==null)return null;
+        ListNode first = head;
+        ListNode second = head.next;
+        ListNode tmp = head.next;
+        if (first.next == null || second.next == null) return head;
+        while (true) {
+            if (second.next == null) break;
+            first.next = second.next;
+            first = first.next;
+            if (first.next == null) break;
+            second.next = first.next;
+            second = second.next;
+        }
+        second.next = null;
+        first.next = tmp;
+        return head;
+    }
+
+    public int[] dailyTemperatures(int[] temperatures) {
+        int j=0;
+        int[] ans=new int[temperatures.length];
+        for (int i = 0; i < temperatures.length; i++) {
+            j=i+1;
+            while(j!=temperatures.length){
+                if(i!=0&&temperatures[i-1]==temperatures[i]){
+                    ans[i]=ans[i-1]==0?0:ans[i-1]-1;
+                    break;
+                }
+                if(temperatures[i]<temperatures[j]){
+                    ans[i]=j-i;
+                    break;
+                }
+                j++;
+            }
+            if(j==temperatures.length)ans[i]=0;
+        }
+        return ans;
+    }
+
 
 }
 
