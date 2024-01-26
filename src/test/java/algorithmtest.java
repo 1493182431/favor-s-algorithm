@@ -2145,9 +2145,103 @@ public class algorithmtest {
         }
         return ans;
     }
+
     @Test
     public void srds() {
         System.out.println(trailingZeroes(668));
+    }
+
+
+    public String convert(String s, int numRows) {
+        if (numRows == 1) {
+            return s;
+        }
+        StringBuilder ans = new StringBuilder();
+        for (int i = 0; i < s.length(); i += (numRows - 1) * 2) {
+            ans.append(s.charAt(i));
+        }
+        for (int i = 1; i < numRows - 1; i++) {
+            for (int j = 0; j * (numRows - 1) * 2 + i < s.length(); j++) {
+                ans.append(s.charAt(j * (numRows - 1) * 2 + i));
+                int r = (j + 1) * (numRows - 1) * 2 - i;
+                if (r < s.length()) {
+                    ans.append(s.charAt(r));
+                }
+            }
+        }
+        for (int i = numRows - 1; i < s.length(); i += (numRows - 1) * 2) {
+            ans.append(s.charAt(i));
+        }
+        return ans.toString();
+    }
+
+    @Test
+    public void seisi() {
+        System.out.println(convert("PAYPALISHIRINGyuthdhrdyrsdyrsdhfxc", 3));
+    }
+
+
+    public ListNode swapPairs(ListNode head) {
+        if (head == null || head.next == null) return head;
+        ListNode first = head;
+        ListNode second = head.next;
+        ListNode last = null;
+        head = second;
+        while (second.next != null) {
+            if (last != null) {
+                last.next = second;
+            }
+            first.next = second.next;
+            second.next = first;
+            last = first;
+            first = first.next;
+            if (first.next == null) {
+                second = null;
+                break;
+            }
+            second = first.next;
+        }
+        if (second == null) {
+            last.next = first;
+        } else {
+            if (last != null) last.next = second;
+            first.next = second.next;
+            second.next = first;
+        }
+        return head;
+    }
+
+
+    public int[][] generateMatrix(int n) {
+        int[][] ans = new int[n][n];
+        int r1 = 0, r2 = n - 1; // 定义上下边界
+        int c1 = 0, c2 = n - 1; // 定义左右边界
+        int count = 1;
+        while (r1 <= r2 && c1 <= c2) {
+            for (int c = c1; c <= c2; c++) {
+                ans[r1][c] = count;
+                count++;
+            }
+            for (int r = r1 + 1; r <= r2; r++) {
+                ans[r][c2] = count;
+                count++;
+            }
+            if (r1 < r2 && c1 < c2) {
+                for (int c = c2 - 1; c > c1; c--) {
+                    ans[r2][c] = count;
+                    count++;
+                }
+                for (int r = r2; r > r1; r--) {
+                    ans[r][c1] = count;
+                    count++;
+                }
+            }
+            r1++;
+            r2--;
+            c1++;
+            c2--;
+        }
+        return ans;
     }
 
 
