@@ -600,46 +600,6 @@ public class algorithmtest {
         in7(node.right, map);
     }
 
-    public static class Node {
-        public int val;
-        public List<Node> children;
-
-        public Node() {
-        }
-
-        public Node(int _val) {
-            val = _val;
-        }
-
-        public Node(int _val, List<Node> _children) {
-            val = _val;
-            children = _children;
-        }
-    }
-
-    public List<List<Integer>> levelOrder(Node root) {
-        List<List<Integer>> list = new ArrayList<>();
-        lev1(root, list);
-        return list;
-    }
-
-    public void lev1(Node root, List<List<Integer>> list) {
-        if (root == null) return;
-        Queue<Node> queue = new LinkedList<>();
-        queue.add(root);
-        while (!queue.isEmpty()) {
-            List<Integer> tmp = new ArrayList<>();
-            int size = queue.size();
-            for (int i = 0; i < size; i++) {
-                Node poll = queue.poll();
-                tmp.add(poll.val);
-                for (Node child : poll.children) {
-                    if (child != null) queue.add(child);
-                }
-            }
-            list.add(tmp);
-        }
-    }
 
     public void flatten(TreeNode root) {
         List<TreeNode> list = new ArrayList<>();
@@ -2242,6 +2202,220 @@ public class algorithmtest {
             c2--;
         }
         return ans;
+    }
+
+    public int getMinimumDifference(TreeNode root) {
+        int[] ans = {9999999, 9999999};
+        getMinimumDifferenceFun(root, ans);
+        return ans[1];
+    }
+
+    public void getMinimumDifferenceFun(TreeNode node, int[] minValue) {
+        if (node == null) return;
+        getMinimumDifferenceFun(node.left, minValue);
+        minValue[1] = Math.min(minValue[1], Math.abs(node.val - minValue[0]));
+        minValue[0] = node.val;
+        getMinimumDifferenceFun(node.right, minValue);
+    }
+
+    public int findTilt(TreeNode root) {
+        int[] ans = {0};
+        findTiltFun(root, ans);
+        return ans[0];
+    }
+
+    public void findTiltFun(TreeNode node, int[] tmp) {
+        if (node == null) return;
+        findTiltFun(node.left, tmp);
+        findTiltFun(node.right, tmp);
+        int left = node.left == null ? 0 : node.left.val;
+        int right = node.right == null ? 0 : node.right.val;
+        node.val = node.val + right + left;
+        tmp[0] += Math.abs(left - right);
+    }
+
+
+    public List<Double> averageOfLevels(TreeNode root) {
+        List<Double> ans = new ArrayList<>();
+        avgFun(root, ans);
+        return ans;
+    }
+
+    public void avgFun(TreeNode root, List<Double> ans) {
+        Queue<TreeNode> queue = new LinkedList<>();
+        if (root == null) return;
+        queue.add(root);
+        int count = 0;
+        while (!queue.isEmpty()) {
+            int len = queue.size();
+            for (int i = 0; i < len; i++) {
+                TreeNode node = queue.poll();
+                if (ans.size() == count) ans.add((double) node.val);
+                else ans.set(count, ans.get(count) + node.val);
+                if (node.left != null) queue.add(node.left);
+                if (node.right != null) queue.add(node.right);
+            }
+            ans.set(count, ans.get(count) / len);
+            count++;
+
+        }
+
+    }
+
+
+//    public void recoverTree(TreeNode root) {
+//        List<TreeNode>nodes=new ArrayList<>();
+//        List<Integer>tmp=new ArrayList<>();
+//        recoverTreeIn(root,nodes,tmp);
+//        Collections.sort(tmp);
+//        for (int i = 0; i < tmp.size(); i++) {
+//            nodes.get(i).val=tmp.get(i);
+//        }
+//    }
+//    public void recoverTreeIn(TreeNode node,List<TreeNode>nodes,List<Integer>tmp){
+//        if(node==null)return;
+//        recoverTreeIn(node.left,nodes,tmp);
+//        nodes.add(node);
+//        tmp.add(node.val);
+//        recoverTreeIn(node.right,nodes,tmp);
+//    }
+
+    @Test
+    public void daegkhk() {
+        recoverTree(buildTree(1, 3, null, null, 2));
+    }
+
+    public void recoverTree(TreeNode root) {
+        List<TreeNode> nodes = new ArrayList<>();
+        List<TreeNode> last = new ArrayList<>(1);
+        recoverTreeIn(root, nodes, last);
+        if (nodes.size() == 2) {
+            int tmp = nodes.get(0).val;
+            nodes.get(0).val = nodes.get(1).val;
+            nodes.get(1).val = tmp;
+        }
+        if (nodes.size() == 4) {
+            int tmp = nodes.get(0).val;
+            nodes.get(0).val = nodes.get(3).val;
+            nodes.get(3).val = tmp;
+        }
+    }
+
+    public void recoverTreeIn(TreeNode node, List<TreeNode> nodes, List<TreeNode> last) {
+        if (node == null) return;
+        recoverTreeIn(node.left, nodes, last);
+        if (!last.isEmpty()) {
+            if (last.get(0).val > node.val) {
+                nodes.add(last.get(0));
+                nodes.add(node);
+            }
+            last.set(0, node);
+        } else last.add(node);
+        recoverTreeIn(node.right, nodes, last);
+    }
+
+
+    public BinaryTree.TreeNode sortedArrayToBST(int[] nums) {
+        return sortedArrayToBSTFun(nums, 0, nums.length - 1);
+    }
+
+    public BinaryTree.TreeNode sortedArrayToBSTFun(int[] nums, int left, int right) {
+        if (left > right) {
+            return null;
+        }
+        // 总是选择中间位置左边的数字作为根节点
+        int mid = (left + right) / 2;
+
+        BinaryTree.TreeNode root = new BinaryTree.TreeNode(nums[mid]);
+        root.left = sortedArrayToBSTFun(nums, left, mid - 1);
+        root.right = sortedArrayToBSTFun(nums, mid + 1, right);
+        return root;
+    }
+
+
+    public TreeNode sortedListToBST(ListNode head) {
+        return buildTree(head, null);
+    }
+
+    public TreeNode buildTree(ListNode left, ListNode right) {
+        if (left == right) {
+            return null;
+        }
+        ListNode fast = left;
+        ListNode slow = left;
+        while (fast != right && fast.next != right) {
+            fast = fast.next;
+            fast = fast.next;
+            slow = slow.next;
+        }
+        ListNode mid = slow;
+        TreeNode root = new TreeNode(mid.val);
+        root.left = buildTree(left, mid);
+        root.right = buildTree(mid.next, right);
+        return root;
+    }
+
+
+    class Node {
+        public int val;
+        public Node left;
+        public Node right;
+        public Node next;
+
+        public Node() {
+        }
+
+        public Node(int _val) {
+            val = _val;
+        }
+
+        public Node(int _val, Node _left, Node _right, Node _next) {
+            val = _val;
+            left = _left;
+            right = _right;
+            next = _next;
+        }
+    }
+
+    public Node connect(Node root) {
+        if (root == null) return null;
+        connectFun(root);
+        return root;
+    }
+
+    public void connectFun(Node root) {
+        Queue<Node> queue = new LinkedList<>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            int len = queue.size();
+            for (int i = 0; i < len; i++) {
+                Node node = queue.poll();
+                node.next = i == len - 1 ? null : queue.peek();
+                if (node.left != null) queue.add(node.left);
+                if (node.right != null) queue.add(node.right);
+            }
+        }
+    }
+
+    public List<Integer> rightSideView(TreeNode root) {
+        List<Integer> ans = new ArrayList<>();
+        if (root == null) return ans;
+        rightSideViewFun(root, ans);
+        return ans;
+    }
+
+    public void rightSideViewFun(TreeNode root, List<Integer> list) {
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            int len = queue.size();
+            for (int i = 0; i < len; i++) {
+                TreeNode node = queue.poll();
+                if (i == len - 1) list.add(node.val);
+                if (node.left != null) queue.add(node.left);
+                if (node.right != null) queue.add(node.right);
+            }
+        }
     }
 
 
