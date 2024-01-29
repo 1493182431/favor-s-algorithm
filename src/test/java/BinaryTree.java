@@ -208,11 +208,11 @@ public class BinaryTree {
     }
 
 
-
     //给你一个整数数组 nums ，其中元素已经按 升序 排列，请你将其转换为一棵 高度平衡 二叉搜索树。
     public TreeNode sortedArrayToBST(int[] nums) {
         return sortedArrayToBSTFun(nums, 0, nums.length - 1);
     }
+
     public TreeNode sortedArrayToBSTFun(int[] nums, int left, int right) {
         if (left > right) {
             return null;
@@ -227,11 +227,11 @@ public class BinaryTree {
     }
 
 
-
     //给定一个单链表的头节点  head ，其中的元素 按升序排序 ，将其转换为高度平衡的二叉搜索树。
     public TreeNode sortedListToBST(ListNode head) {
         return buildTree(head, null);
     }
+
     public TreeNode buildTree(ListNode left, ListNode right) {
         if (left == right) {
             return null;
@@ -251,7 +251,6 @@ public class BinaryTree {
     }
 
 
-
     //给你一棵二叉树的根节点 root ，翻转这棵二叉树，并返回其根节点。
     public TreeNode invertTree(TreeNode root) {
         if (root == null) return null;
@@ -269,13 +268,13 @@ public class BinaryTree {
     }
 
 
-
     //给定二叉树的根节点 root ，返回所有左叶子之和。
     public int sumOfLeftLeaves(TreeNode root) {
         int[] ans = new int[]{0};
         sumOfLeftLeavesFun(root, ans);
         return ans[0];
     }
+
     public void sumOfLeftLeavesFun(TreeNode node, int[] ans) {
         if (node == null) return;
         sumOfLeftLeavesFun(node.left, ans);
@@ -286,8 +285,7 @@ public class BinaryTree {
     }
 
 
-
-//    给你一个二叉树的根节点 root ，计算并返回 整个树 的坡度 。
+    //    给你一个二叉树的根节点 root ，计算并返回 整个树 的坡度 。
 //    一个树的 节点的坡度 定义即为，该节点左子树的节点之和和右子树节点之和的 差的绝对值 。如果没有左子树的话，左子树的节点之和为 0 ；没有右子树的话也是一样。空结点的坡度是 0 。
 //    整个树 的坡度就是其所有节点的坡度之和。
     public int findTilt(algorithmtest.TreeNode root) {
@@ -295,6 +293,7 @@ public class BinaryTree {
         findTiltFun(root, ans);
         return ans[0];
     }
+
     public void findTiltFun(algorithmtest.TreeNode node, int[] tmp) {
         if (node == null) return;
         findTiltFun(node.left, tmp);
@@ -309,7 +308,6 @@ public class BinaryTree {
 //----------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------未理解----------------------------------------------------------
-
 
 
     //给定两个整数数组 preorder 和 inorder ，其中 preorder 是二叉树的先序遍历， inorder 是同一棵树的中序遍历，请构造二叉树并返回其根节点。
@@ -341,11 +339,11 @@ public class BinaryTree {
     }
 
 
-
     @Test
     public void preorderTraversal() {
         System.out.println(preorderTraversal(buildTree(1, 2, 3, 4, 5, 6, 7)));
     }
+
     // 前序遍历迭代法
     public List<Integer> preorderTraversal(TreeNode root) {
         List<Integer> res = new ArrayList<Integer>();
@@ -365,11 +363,11 @@ public class BinaryTree {
     }
 
 
-
     @Test
     public void inorderTraversal() {
         System.out.println(inorderTraversal(buildTree(1, 2, 3, 4, 5, 6, 7)));
     }
+
     // 中序遍历迭代法
     public List<Integer> inorderTraversal(TreeNode root) {
         List<Integer> res = new ArrayList<Integer>();
@@ -389,11 +387,11 @@ public class BinaryTree {
     }
 
 
-
     @Test
     public void postorderTraversal() {
         System.out.println(postorderTraversal(buildTree(1, 2, 3, 4, 5, 6, 7)));
     }
+
     // 后序遍历迭代法
     public List<Integer> postorderTraversal(TreeNode root) {
         List<Integer> res = new ArrayList<Integer>();
@@ -418,6 +416,8 @@ public class BinaryTree {
         }
         return res;
     }
+
+
 
 
 }

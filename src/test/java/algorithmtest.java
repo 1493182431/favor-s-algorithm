@@ -2155,5 +2155,66 @@ public class algorithmtest {
     }
 
 
+    @Test
+    public void wihfn() {
+        System.out.println(isPalindrome("A man, a plan, a canal: Panama"));
+    }
+
+    public boolean isPalindrome(String s) {
+        int left = 0, right = s.length() - 1;
+        char l, r;
+        while (left <= right) {
+            if (s.charAt(left) >= 65 && s.charAt(left) <= 90) l = (char) (s.charAt(left) + 32);
+            else if ((s.charAt(left) >= 97 && s.charAt(left) <= 122) || (s.charAt(left) >= 48 && s.charAt(left) <= 57))
+                l = s.charAt(left);
+            else l = ' ';
+            if (s.charAt(right) >= 65 && s.charAt(right) <= 90) r = (char) (s.charAt(right) + 32);
+            else if ((s.charAt(right) >= 97 && s.charAt(right) <= 122) || (s.charAt(right) >= 48 && s.charAt(right) <= 57))
+                r = s.charAt(right);
+            else r = ' ';
+
+            if (l != ' ' && r == l) {
+                left++;
+                right--;
+            } else if (l == ' ') left++;
+            else if (r == ' ') right--;
+            else return false;
+        }
+        return true;
+    }
+
+    public String convertToTitle(int columnNumber) {
+        StringBuffer sb = new StringBuffer();
+        while (columnNumber != 0) {
+            columnNumber--;
+            sb.append((char) (columnNumber % 26 + 'A'));
+            columnNumber /= 26;
+        }
+        return sb.reverse().toString();
+    }
+
+    public int titleToNumber(String columnTitle) {
+        int ans = 0;
+        for (int i = 0; i < columnTitle.length(); i++) {
+            ans += (int) (((int) columnTitle.charAt(columnTitle.length() - i - 1) - 64) * Math.pow(26, i));
+        }
+        return ans;
+    }
+
+    public int lengthOfLongestSubstring(String s) {
+        Set<Character>set=new HashSet<>();
+        int ans=0;
+        for (int i = 0; i < s.length(); i++) {
+            int j=i;
+            while (j<s.length()&&set.add(s.charAt(j))){
+                j++;
+            }
+            ans=Math.max(ans,set.size());
+            set.clear();
+        }
+        return ans;
+    }
+
+
 }
 
