@@ -3,6 +3,8 @@ import org.junit.Test;
 import java.util.*;
 
 public class good {
+
+    // &&有短路作用！！！
     public boolean hasPathSum(algorithmtest.TreeNode root, int targetSum) {
         // java基本数据类型是值传递，在深层递归中改变的值不会传递到浅层递归。
 
@@ -36,42 +38,41 @@ public class good {
     }
 
 
-    // KMP 算法
-    // ss: 原串(string)  pp: 匹配串(pattern)
+    @Test
+    public void KMP_Test() {
+        System.out.println(strStr("aaa", "aaa"));
+    }
+
+    // KMP算法
+    // ss文本串 pp模式串 在ss中找到第一个与pp匹配的子串并返回匹配到的下标
     public int strStr(String ss, String pp) {
-        if (pp.isEmpty()) return 0;
-
-        // 分别读取原串和匹配串的长度
-        int n = ss.length(), m = pp.length();
-        // 原串和匹配串前面都加空格，使其下标从 1 开始
-        ss = " " + ss;
-        pp = " " + pp;
-
-        char[] s = ss.toCharArray();
-        char[] p = pp.toCharArray();
-
-        // 构建 next 数组，数组长度为匹配串的长度（next 数组是和匹配串相关的）
-        int[] next = new int[m + 1];
-        // 构造过程 i = 2，j = 0 开始，i 小于等于匹配串长度 【构造 i 从 2 开始】
-        for (int i = 2, j = 0; i <= m; i++) {
-            // 匹配不成功的话，j = next(j)
-            while (j > 0 && p[i] != p[j + 1]) j = next[j];
-            // 匹配成功的话，先让 j++
-            if (p[i] == p[j + 1]) j++;
-            // 更新 next[i]，结束本次循环，i++
-            next[i] = j;
+        // 构造next数组
+        int[] next = new int[pp.length()];
+        int prev = 0, index = 1;
+        next[0] = 0;
+        while (index < pp.length()) {
+            // 若待求next[index]与上一个最长前后缀中的前缀的下一个字符相等则next[index]=next[index-1]+1
+            if (pp.charAt(prev) == pp.charAt(index)) {
+                prev++;
+                next[index] = prev;
+                index++;
+                // 若上一个最长前后缀长度==0，则index++，并且next[index]=0，创建数组时默认为0
+            } else if (prev == 0) index++;
+                // 若上一个最长前后缀长度!=0，并且待求next[index]与上一个最长前后缀中的前缀的下一个字符不相等
+                // 则上一个最长前后缀长度变为上一个最长前后缀中最长前后缀的长度
+            else prev = next[prev - 1];
         }
 
-        // 匹配过程，i = 1，j = 0 开始，i 小于等于原串长度 【匹配 i 从 1 开始】
-        for (int i = 1, j = 0; i <= n; i++) {
-            // 匹配不成功 j = next(j)
-            while (j > 0 && s[i] != p[j + 1]) j = next[j];
-            // 匹配成功的话，先让 j++，结束本次循环后 i++
-            if (s[i] == p[j + 1]) j++;
-            // 整一段匹配成功，直接返回下标
-            if (j == m) return i - m;
+        // 字符串匹配
+        int i = 0, j = 0;
+        while (i < ss.length()) {
+            if (ss.charAt(i) == pp.charAt(j)) {
+                i++;
+                j++;
+            } else if (j > 0) j = next[j - 1];
+            else i++;
+            if (j == pp.length()) return i - j;
         }
-
         return -1;
     }
 
@@ -227,5 +228,118 @@ public class good {
 
 
 
+    public boolean CanConstruct(String ransomNote, String magazine) {
+        Map<Character, Integer> map = new HashMap<>();
+        for (char c : magazine.toCharArray()) {
+            map.put(c, map.getOrDefault(c, 0) + 1);
+        }
+        // map.getOrDefault：得到key对应的value，如果没有则得到默认值
+        for (char c : ransomNote.toCharArray()) {
+            if (map.containsKey(c)) {
+                int count = map.get(c);
+                if (count > 1) {
+                    map.put(c, count - 1);
+                } else {
+                    map.remove(c);
+                }
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+
+    public int firstUniqChar(String s) {
+        // 若需要的哈希表容量较小可以考虑自己构建哈希表
+        int[] arr = new int[26];
+        char[] chars = s.toCharArray();
+        for (char c : chars) {
+            arr[c - 'a']++;
+        }
+        for (int i = 0; i < chars.length; i++) {
+            if (arr[chars[i] - 'a'] == 1) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+
+
+    // 大整数加法
+    // 给定两个字符串形式的非负整数 num1 和num2 ，计算它们的和并同样以字符串形式返回。
+    // 你不能使用任何內建的用于处理大整数的库（比如 BigInteger）， 也不能直接将输入的字符串转换为整数形式。
+    public String addStrings(String num1, String num2) {
+        int i = num1.length() - 1, j = num2.length() - 1, add = 0;
+        StringBuffer ans = new StringBuffer();
+        while (i >= 0 || j >= 0 || add != 0) {
+            int x = i >= 0 ? num1.charAt(i) - '0' : 0;
+            int y = j >= 0 ? num2.charAt(j) - '0' : 0;
+            int result = x + y + add;
+            // 本位
+            ans.append(result % 10);
+            // 进位
+            add = result / 10;
+            i--;
+            j--;
+        }
+        // 计算完以后的答案需要翻转过来
+        ans.reverse();
+        return ans.toString();
+    }
+
+
+    // 大整数乘法
+    // 给定两个以字符串形式表示的非负整数 num1 和 num2，返回 num1 和 num2 的乘积，它们的乘积也表示为字符串形式。
+    // 注意：不能使用任何内置的 BigInteger 库或直接将输入转换为整数。
+    public String multiply(String num1, String num2) {
+        if (num1.equals("0") || num2.equals("0")) {
+            return "0";
+        }
+        int m = num1.length(), n = num2.length();
+        // m位数*n位数的结果最多位m+n位数
+        int[] res = new int[m + n];
+        // 处理每位的乘积
+        for (int i = m - 1; i >= 0; i--) {
+            int x = num1.charAt(i) - '0';
+            for (int j = n - 1; j >= 0; j--) {
+                int y = num2.charAt(j) - '0';
+                res[i + j + 1] += x * y;
+            }
+        }
+        // 处理进位
+        for (int i = m + n - 1; i > 0; i--) {
+            res[i - 1] += res[i] / 10;
+            res[i] %= 10;
+        }
+        // m位数*n位数的结果最少为m+n-1位数
+        int index = res[0] == 0 ? 1 : 0;
+        StringBuilder sb = new StringBuilder();
+        while (index < m + n) {
+            sb.append(res[index]);
+            index++;
+        }
+        return sb.toString();
+    }
+
+
+
+    // 生成杨辉三角
+    public static List<List<Integer>> generate(int numRows) {
+        List<List<Integer>>ans=new ArrayList<>();
+        for (int i = 0; i < numRows; i++) {
+            List<Integer>tmp=new ArrayList<>();
+            tmp.add(1);
+            for (int j = 1; j <= i; j++) {
+                // 组合数递推公式 Cm,n=n!/m!*(n-m)! Cm,n=Cm-1,n*(n-m+1)/m
+                // ArrayList中set方法只能改变已存在的下标对应的值
+                tmp.add(tmp.get(j-1)*(1+i-j)/j);
+            }
+            ans.add(tmp);
+        }
+        return ans;
+    }
 
 }

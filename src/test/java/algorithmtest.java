@@ -661,18 +661,6 @@ public class algorithmtest {
         return tmp;
     }
 
-    public int firstUniqChar(String s) {
-        Map<Character, Integer> map = new HashMap<>();
-        for (char c : s.toCharArray()) {
-            if (map.containsKey(c)) map.put(c, map.get(c) + 1);
-            else map.put(c, 1);
-        }
-        for (int i = 0; i < s.length(); i++) {
-            if (map.get(s.charAt(i)) == 1) return i;
-        }
-        return -1;
-    }
-
     public boolean canConstruct(String ransomNote, String magazine) {
         int len = ransomNote.length();
         Map<Character, Integer> map = new HashMap<>();
@@ -939,23 +927,6 @@ public class algorithmtest {
         int[] array = set.stream().mapToInt(Integer::intValue).toArray();
         if (array.length < 3) return array[array.length - 1];
         return array[array.length - 3];
-    }
-
-    public List<Integer> getRow(int rowIndex) {
-        int index = rowIndex + 1;
-        List<List<Integer>> lists = new ArrayList<>(index);
-        for (int i = 1; i <= index; i++) {
-            List<Integer> listInside = new ArrayList<>(i);
-            listInside.add(1);
-            for (int j = 1; j < i - 1; j++) {
-                listInside.add(lists.get(i - 2).get(j - 1) + lists.get(i - 2).get(j));
-            }
-            if (i > 1) {
-                listInside.add(1);
-            }
-            lists.add(listInside);
-        }
-        return lists.get(index);
     }
 
     public List<List<Integer>> generate(int numRows) {
@@ -2153,6 +2124,141 @@ public class algorithmtest {
             }
         }
     }
+
+
+    @Test
+    public void wihfn() {
+        System.out.println(isPalindrome("A man, a plan, a canal: Panama"));
+    }
+
+    public boolean isPalindrome(String s) {
+        int left = 0, right = s.length() - 1;
+        char l, r;
+        while (left <= right) {
+            if (s.charAt(left) >= 65 && s.charAt(left) <= 90) l = (char) (s.charAt(left) + 32);
+            else if ((s.charAt(left) >= 97 && s.charAt(left) <= 122) || (s.charAt(left) >= 48 && s.charAt(left) <= 57))
+                l = s.charAt(left);
+            else l = ' ';
+            if (s.charAt(right) >= 65 && s.charAt(right) <= 90) r = (char) (s.charAt(right) + 32);
+            else if ((s.charAt(right) >= 97 && s.charAt(right) <= 122) || (s.charAt(right) >= 48 && s.charAt(right) <= 57))
+                r = s.charAt(right);
+            else r = ' ';
+
+            if (l != ' ' && r == l) {
+                left++;
+                right--;
+            } else if (l == ' ') left++;
+            else if (r == ' ') right--;
+            else return false;
+        }
+        return true;
+    }
+
+    public String convertToTitle(int columnNumber) {
+        StringBuffer sb = new StringBuffer();
+        while (columnNumber != 0) {
+            columnNumber--;
+            sb.append((char) (columnNumber % 26 + 'A'));
+            columnNumber /= 26;
+        }
+        return sb.reverse().toString();
+    }
+
+    public int titleToNumber(String columnTitle) {
+        int ans = 0;
+        for (int i = 0; i < columnTitle.length(); i++) {
+            ans += (int) (((int) columnTitle.charAt(columnTitle.length() - i - 1) - 64) * Math.pow(26, i));
+        }
+        return ans;
+    }
+
+    public int lengthOfLongestSubstring(String s) {
+        Set<Character> set = new HashSet<>();
+        int ans = 0;
+        for (int i = 0; i < s.length(); i++) {
+            int j = i;
+            while (j < s.length() && set.add(s.charAt(j))) {
+                j++;
+            }
+            ans = Math.max(ans, set.size());
+            set.clear();
+        }
+        return ans;
+    }
+
+    public boolean isSubsequence(String s, String t) {
+        int first = 0, second = 0;
+        while (second < t.length()) {
+            if (first == s.length()) break;
+            if (s.charAt(first) == t.charAt(second)) {
+                first++;
+                second++;
+            } else second++;
+        }
+
+        return first == t.length();
+    }
+
+    public int longestPalindrome(String s) {
+        int[] count = new int[128];
+        int length = s.length();
+        int res = 0;
+        for (int i = 0; i < length; i++) {
+            char c = s.charAt(i);
+            count[c]++;
+        }
+
+        for (int i : count) {
+            res += i / 2 * 2;
+            if (i % 2 == 1 && res % 2 == 0) {
+                res++;
+            }
+        }
+        return res;
+    }
+
+    public int countSegments(String s) {
+        int ans = 0;
+        int tmp = 0;
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) != ' ' && tmp == 0) {
+                tmp++;
+                ans++;
+            }
+            if (s.charAt(i) == ' ') tmp = 0;
+        }
+        return ans;
+    }
+
+    public void merge(int[] nums1, int m, int[] nums2, int n) {
+        int[] tmp = nums1.clone();
+        int i=0,j=0,index=0;
+        while (i<m||j<n){
+            if(i==m){
+                nums1[index]=nums2[j];
+                j++;
+                index++;
+                continue;
+            }
+            if(j==n){
+                nums1[index]=tmp[i];
+                i++;
+                index++;
+                continue;
+            }
+            if(tmp[i]<=nums2[j]){
+                nums1[index]=tmp[i];
+                i++;
+                index++;
+            }else {
+                nums1[index]=nums2[j];
+                j++;
+                index++;
+            }
+        }
+    }
+
+
 
 
 }
