@@ -677,22 +677,6 @@ public class algorithmtest {
         return len == 0;
     }
 
-    public static int[] intersect(int[] nums1, int[] nums2) {
-        Map<Integer, Integer> map = new HashMap<>();
-        ArrayList<Integer> ans = new ArrayList<>();
-        for (int i : nums1) {
-            if (map.containsKey(i)) map.put(i, map.get(i) + 1);
-            else map.put(i, 1);
-        }
-        for (int i : nums2) {
-            if (map.containsKey(i) && map.get(i) > 0) {
-                ans.add(i);
-                map.put(i, map.get(i) - 1);
-            }
-        }
-        return ans.stream().mapToInt(Integer::intValue).toArray();
-    }
-
     public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
         ListNode a = headA, b = headB;
         Set<ListNode> set = new HashSet<>();
@@ -2232,32 +2216,118 @@ public class algorithmtest {
 
     public void merge(int[] nums1, int m, int[] nums2, int n) {
         int[] tmp = nums1.clone();
-        int i=0,j=0,index=0;
-        while (i<m||j<n){
-            if(i==m){
-                nums1[index]=nums2[j];
+        int i = 0, j = 0, index = 0;
+        while (i < m || j < n) {
+            if (i == m) {
+                nums1[index] = nums2[j];
                 j++;
                 index++;
                 continue;
             }
-            if(j==n){
-                nums1[index]=tmp[i];
+            if (j == n) {
+                nums1[index] = tmp[i];
                 i++;
                 index++;
                 continue;
             }
-            if(tmp[i]<=nums2[j]){
-                nums1[index]=tmp[i];
+            if (tmp[i] <= nums2[j]) {
+                nums1[index] = tmp[i];
                 i++;
                 index++;
-            }else {
-                nums1[index]=nums2[j];
+            } else {
+                nums1[index] = nums2[j];
                 j++;
                 index++;
             }
         }
     }
 
+    public int majorityElement(int[] nums) {
+        int[] tmp = new int[nums.length];
+        for (int num : nums) {
+            tmp[num]++;
+            if (tmp[num] == nums.length / 2) return num;
+        }
+        return 0;
+    }
+
+    public List<String> summaryRanges(int[] nums) {
+        List<String> ans = new ArrayList<>();
+        List<Integer> tmp = new ArrayList<>();
+        for (int num : nums) {
+            if (tmp.isEmpty()) {
+                tmp.add(num);
+                continue;
+            }
+            if (num == tmp.get(tmp.size() - 1) + 1) tmp.add(num);
+            else {
+                if (tmp.size() == 1) ans.add(String.valueOf(tmp.get(0)));
+                else ans.add(tmp.get(0) + "->" + tmp.get(tmp.size() - 1));
+                tmp = new ArrayList<>();
+                tmp.add(num);
+            }
+        }
+        if (!tmp.isEmpty()) {
+            if (tmp.size() == 1) ans.add(String.valueOf(tmp.get(0)));
+            else ans.add(tmp.get(0) + "->" + tmp.get(tmp.size() - 1));
+        }
+        return ans;
+    }
+
+    class NumArray {
+        private int[]tmp;
+
+        public NumArray(int[] nums) {
+            tmp=new int[nums.length];
+            for (int i = 0; i < nums.length; i++) {
+                if(i!=0)tmp[i]=tmp[i-1]+nums[i];
+                else tmp[i]=nums[i];
+            }
+        }
+
+        public int sumRange(int left, int right) {
+            if(left==0)return tmp[right];
+            return tmp[right]-tmp[left-1];
+        }
+    }
+
+    public int[] intersection(int[] nums1, int[] nums2) {
+        int[]tmp=new int[1001];
+        for (int i : nums1) {
+            tmp[i]=1;
+        }
+        List<Integer>ans=new ArrayList<>();
+        for (int i : nums2) {
+            if(tmp[i]==1){
+                tmp[i]=0;
+                ans.add(i);
+            }
+        }
+        int[]res=new int[ans.size()];
+        for (int i = 0; i < ans.size(); i++) {
+            res[i]=ans.get(i);
+        }
+        return res;
+    }
+
+    public int[] intersect(int[] nums1, int[] nums2) {
+        int[]tmp=new int[1001];
+        for (int i : nums1) {
+            tmp[i]++;
+        }
+        List<Integer>ans=new ArrayList<>();
+        for (int i : nums2) {
+            if(tmp[i]>0){
+                tmp[i]--;
+                ans.add(i);
+            }
+        }
+        int[]res=new int[ans.size()];
+        for (int i = 0; i < ans.size(); i++) {
+            res[i]=ans.get(i);
+        }
+        return res;
+    }
 
 
 

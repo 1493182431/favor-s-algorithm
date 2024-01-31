@@ -252,7 +252,7 @@ public class good {
 
 
     public int firstUniqChar(String s) {
-        // 若需要的哈希表容量较小可以考虑自己构建哈希表
+        // 若需要的哈希表容量较小可以考虑自己构建哈希表，速度更快
         int[] arr = new int[26];
         char[] chars = s.toCharArray();
         for (char c : chars) {
