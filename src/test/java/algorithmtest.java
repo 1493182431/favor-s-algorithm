@@ -2275,61 +2275,170 @@ public class algorithmtest {
     }
 
     class NumArray {
-        private int[]tmp;
+        private int[] tmp;
 
         public NumArray(int[] nums) {
-            tmp=new int[nums.length];
+            tmp = new int[nums.length];
             for (int i = 0; i < nums.length; i++) {
-                if(i!=0)tmp[i]=tmp[i-1]+nums[i];
-                else tmp[i]=nums[i];
+                if (i != 0) tmp[i] = tmp[i - 1] + nums[i];
+                else tmp[i] = nums[i];
             }
         }
 
         public int sumRange(int left, int right) {
-            if(left==0)return tmp[right];
-            return tmp[right]-tmp[left-1];
+            if (left == 0) return tmp[right];
+            return tmp[right] - tmp[left - 1];
         }
     }
 
     public int[] intersection(int[] nums1, int[] nums2) {
-        int[]tmp=new int[1001];
+        int[] tmp = new int[1001];
         for (int i : nums1) {
-            tmp[i]=1;
+            tmp[i] = 1;
         }
-        List<Integer>ans=new ArrayList<>();
+        List<Integer> ans = new ArrayList<>();
         for (int i : nums2) {
-            if(tmp[i]==1){
-                tmp[i]=0;
+            if (tmp[i] == 1) {
+                tmp[i] = 0;
                 ans.add(i);
             }
         }
-        int[]res=new int[ans.size()];
+        int[] res = new int[ans.size()];
         for (int i = 0; i < ans.size(); i++) {
-            res[i]=ans.get(i);
+            res[i] = ans.get(i);
         }
         return res;
     }
 
     public int[] intersect(int[] nums1, int[] nums2) {
-        int[]tmp=new int[1001];
+        int[] tmp = new int[1001];
         for (int i : nums1) {
             tmp[i]++;
         }
-        List<Integer>ans=new ArrayList<>();
+        List<Integer> ans = new ArrayList<>();
         for (int i : nums2) {
-            if(tmp[i]>0){
+            if (tmp[i] > 0) {
                 tmp[i]--;
                 ans.add(i);
             }
         }
-        int[]res=new int[ans.size()];
+        int[] res = new int[ans.size()];
         for (int i = 0; i < ans.size(); i++) {
-            res[i]=ans.get(i);
+            res[i] = ans.get(i);
         }
         return res;
     }
 
+    public int findContentChildren(int[] g, int[] s) {
+        int ans = 0;
+        int i = 0, j = 0;
+        Arrays.sort(g);
+        Arrays.sort(s);
+        while (i < g.length && j < s.length) {
+            if (g[i] <= s[j]) {
+                ans++;
+                i++;
+                j++;
+            } else j++;
+        }
+        return ans;
+    }
 
+    public int findMaxConsecutiveOnes(int[] nums) {
+        int ans = 0, tmp = 0;
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] == 0) {
+                ans = Math.max(ans, tmp);
+                tmp = 0;
+            } else tmp++;
+        }
+        return Math.max(ans, tmp);
+    }
+
+    public int findPoisonedDuration(int[] timeSeries, int duration) {
+        int left = timeSeries[0], right = timeSeries[0] + duration - 1, ans = 0;
+        for (int i = 0; i < timeSeries.length; i++) {
+            if (timeSeries[i] >= left && timeSeries[i] <= right) {
+                right = timeSeries[i] + duration - 1;
+            } else {
+                ans += (right - left + 1);
+                left = timeSeries[i];
+                right = timeSeries[i] + duration - 1;
+            }
+        }
+        return ans;
+    }
+
+
+    public int[] nextGreaterElement(int[] nums1, int[] nums2) {
+        Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+        Deque<Integer> stack = new ArrayDeque<Integer>();
+        for (int i = nums2.length - 1; i >= 0; --i) {
+            int num = nums2[i];
+            while (!stack.isEmpty() && num >= stack.peek()) {
+                stack.pop();
+            }
+            map.put(num, stack.isEmpty() ? -1 : stack.peek());
+            stack.push(num);
+        }
+        int[] res = new int[nums1.length];
+        for (int i = 0; i < nums1.length; ++i) {
+            res[i] = map.get(nums1[i]);
+        }
+        return res;
+    }
+
+    public int arrayPairSum(int[] nums) {
+        int ans = 0;
+        Arrays.sort(nums);
+        for (int i = 0; i < nums.length; i += 2) {
+            ans += nums[i];
+        }
+        return ans;
+    }
+
+    public int distributeCandies(int[] candyType) {
+        Set<Integer> set = new HashSet<>();
+        for (int i : candyType) {
+            set.add(i);
+        }
+        return Math.min(set.size(), candyType.length / 2);
+    }
+
+    public int maxCount(int m, int n, int[][] ops) {
+        for (int i = 0; i < ops.length; i++) {
+            m = Math.min(m, ops[i][0]);
+            n = Math.min(n, ops[i][1]);
+        }
+        return m * n;
+    }
+
+    @Test
+    public void fwfw(){
+        System.out.println(simplifyPath("/a/./b/../../c/"));
+    }
+    public String simplifyPath(String path) {
+        List<String>tmp= new LinkedList<>(List.of(path.split("/")));
+        StringBuilder ans=new StringBuilder();
+        int last=0;
+        for (int i = 0; i < tmp.size(); i++) {
+            if(ans.isEmpty() &&tmp.get(i).equals("..")){
+                ans.append('/');
+                continue;
+            }
+            if(tmp.get(i).equals("..")){
+                ans.delete(ans.lastIndexOf("/"), ans.length());
+            }
+            else if(!tmp.get(i).equals(".")&&!tmp.get(i).equals("/")&&!tmp.get(i).isEmpty()){
+                if(!ans.isEmpty() &&ans.charAt(ans.length()-1)=='/')ans.append(tmp.get(i));
+                else {
+                    ans.append('/');
+                    ans.append(tmp.get(i));
+                }
+            }
+        }
+        return ans.isEmpty() ?"/":ans.toString();
+    }
 
 }
 
