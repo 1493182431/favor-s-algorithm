@@ -2414,31 +2414,101 @@ public class algorithmtest {
     }
 
     @Test
-    public void fwfw(){
+    public void fwfw() {
         System.out.println(simplifyPath("/a/./b/../../c/"));
     }
+
     public String simplifyPath(String path) {
-        List<String>tmp= new LinkedList<>(List.of(path.split("/")));
-        StringBuilder ans=new StringBuilder();
-        int last=0;
+        List<String> tmp = new LinkedList<>(List.of(path.split("/")));
+        StringBuilder ans = new StringBuilder();
+        int last = 0;
         for (int i = 0; i < tmp.size(); i++) {
-            if(ans.isEmpty() &&tmp.get(i).equals("..")){
+            if (ans.isEmpty() && tmp.get(i).equals("..")) {
                 ans.append('/');
                 continue;
             }
-            if(tmp.get(i).equals("..")){
+            if (tmp.get(i).equals("..")) {
                 ans.delete(ans.lastIndexOf("/"), ans.length());
-            }
-            else if(!tmp.get(i).equals(".")&&!tmp.get(i).equals("/")&&!tmp.get(i).isEmpty()){
-                if(!ans.isEmpty() &&ans.charAt(ans.length()-1)=='/')ans.append(tmp.get(i));
+            } else if (!tmp.get(i).equals(".") && !tmp.get(i).equals("/") && !tmp.get(i).isEmpty()) {
+                if (!ans.isEmpty() && ans.charAt(ans.length() - 1) == '/') ans.append(tmp.get(i));
                 else {
                     ans.append('/');
                     ans.append(tmp.get(i));
                 }
             }
         }
-        return ans.isEmpty() ?"/":ans.toString();
+        return ans.isEmpty() ? "/" : ans.toString();
     }
+
+    @Test
+    public void wkhk() {
+        System.out.println(findMaxAverage(new int[]{1, 12, -5, -6, 50, 3}, 4));
+    }
+
+    public double findMaxAverage(int[] nums, int k) {
+        if (nums.length == 1) return nums[0];
+        double sum = 0;
+        for (int i = 0; i < k; i++) {
+            sum += nums[i];
+        }
+        double tmp = sum;
+        for (int i = k; i < nums.length; i++) {
+            tmp -= nums[i - k];
+            tmp += nums[i];
+            sum = nums[i] > nums[i - k] ? tmp : sum;
+        }
+        return sum / k;
+    }
+
+    public int[] findErrorNums(int[] nums) {
+        int[] ans = new int[2];
+        int[] tmp = new int[10001];
+        for (int num : nums) {
+            if (tmp[num] == 1) ans[0] = num;
+            tmp[num] = 1;
+        }
+        for (int i = 1; i <= nums.length; i++) {
+            if (tmp[i] == 0) ans[1] = nums[i];
+        }
+        return ans;
+    }
+
+    public int findLengthOfLCIS(int[] nums) {
+        int ans = 1, tmp = 1;
+        for (int i = 0; i < nums.length - 1; i++) {
+            if (nums[i + 1] > nums[i]) tmp++;
+            else tmp = 1;
+            ans = Math.max(ans, tmp);
+        }
+        return ans;
+    }
+
+    @Test
+    public void eljkek() {
+        System.out.println(groupAnagrams(new String[]{"eat", "tea", "tan", "ate", "nat", "bat"}));
+    }
+
+    public List<List<String>> groupAnagrams(String[] strs) {
+        Map<String, List<String>> map = new HashMap<>();
+        for (int i = 0; i < strs.length; i++) {
+            char[] array = strs[i].toCharArray();
+            Arrays.sort(array);
+            String tmp = new String(array);
+            if (map.containsKey(tmp)) map.get(tmp).add(strs[i]);
+            else {
+                map.put(tmp, new ArrayList<>());
+                map.get(tmp).add(strs[i]);
+            }
+        }
+        List<List<String>> ans = new ArrayList<>();
+        for (List<String> value : map.values()) {
+            ans.add(value);
+        }
+        return ans;
+    }
+
+
+
 
 }
 
