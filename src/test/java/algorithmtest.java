@@ -2507,7 +2507,18 @@ public class algorithmtest {
         return ans;
     }
 
-
+    public TreeNode convertBST(TreeNode root) {
+        int[] tmp = new int[1];
+        inorderConvertBST(root,tmp);
+        return root;
+    }
+    public void inorderConvertBST(TreeNode node, int[] tmp) {
+        if (node == null) return;
+        inorderConvertBST(node.right, tmp);
+        tmp[0] += node.val;
+        node.val = tmp[0];
+        inorderConvertBST(node.left, tmp);
+    }
 
 
 }
