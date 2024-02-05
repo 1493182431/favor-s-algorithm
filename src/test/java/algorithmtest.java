@@ -2509,9 +2509,10 @@ public class algorithmtest {
 
     public TreeNode convertBST(TreeNode root) {
         int[] tmp = new int[1];
-        inorderConvertBST(root,tmp);
+        inorderConvertBST(root, tmp);
         return root;
     }
+
     public void inorderConvertBST(TreeNode node, int[] tmp) {
         if (node == null) return;
         inorderConvertBST(node.right, tmp);
@@ -2520,6 +2521,65 @@ public class algorithmtest {
         inorderConvertBST(node.left, tmp);
     }
 
+    public boolean findTarget(TreeNode root, int k) {
+        Set<Integer> set = new HashSet<>();
+        findTargetOrder(root,set,k);
+        return set.contains(10001);
+    }
+    public void findTargetOrder(TreeNode node, Set<Integer> set, int k) {
+        if (node == null||set.contains(10001)) return;
+        if (set.contains(k - node.val)) set.add(10001);
+        else set.add(node.val);
+        findTargetOrder(node.left, set, k);
+        findTargetOrder(node.right, set, k);
+    }
+
+    public boolean isHappy(int n) {
+        Set<Integer>set=new HashSet<>();
+        int tmp=0;
+        while (n!=1){
+            while (n!=0){
+                tmp+=((n%10)*(n%10));
+                n/=10;
+            }
+            if (set.contains(tmp))return false;
+            set.add(tmp);
+            n=tmp;
+            tmp=0;
+        }
+        return true;
+    }
+
+    public int[] countBits(int n) {
+        int[]bits=new int[n+1];
+        for (int i = 1; i <= n; i++) {
+            bits[i] = bits[i & (i - 1)] + 1;
+        }
+        return bits;
+    }
+
+    public int fib(int n) {
+        int ans=0,a=0,b=1;
+        if(n==0||n==1)return n;
+        for (int i = 2; i <= n; i++) {
+            ans=a+b;
+            a=b;
+            b=ans;
+        }
+        return ans;
+    }
+
+    public int minCostClimbingStairs(int[] cost) {
+        int a=cost[0],b=cost[1],ans=0,tmp=0;
+        if(cost.length==2)return Math.min(a,b);
+        for (int i = 2; i < cost.length; i++) {
+            tmp=Math.min(a,b);
+            ans+=tmp;
+            a=b;
+            b=cost[i];
+        }
+        return ans;
+    }
 
 }
 
