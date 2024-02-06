@@ -291,6 +291,7 @@ public class good {
     }
 
 
+
     // 大整数乘法
     // 给定两个以字符串形式表示的非负整数 num1 和 num2，返回 num1 和 num2 的乘积，它们的乘积也表示为字符串形式。
     // 注意：不能使用任何内置的 BigInteger 库或直接将输入转换为整数。
@@ -342,4 +343,35 @@ public class good {
         return ans;
     }
 
+
+
+    // 输入两个字符串s和t，返回将s转换为t所需的最少编辑步数。
+    // 你可以在一个字符串中进行三种编辑操作：插入一个字符、删除一个字符、将字符替换为任意一个字符。
+    public int minDistance(String s, String t) {
+        int n = s.length(), m = t.length();
+        int[] dp = new int[m + 1];
+        // 状态转移：首行
+        for (int j = 1; j <= m; j++) {
+            dp[j] = j;
+        }
+        // 状态转移：其余行
+        for (int i = 1; i <= n; i++) {
+            // 状态转移：首列
+            int leftup = dp[0]; // 暂存 dp[i-1, j-1]
+            dp[0] = i;
+            // 状态转移：其余列
+            for (int j = 1; j <= m; j++) {
+                int temp = dp[j];
+                if (s.charAt(i - 1) == t.charAt(j - 1)) {
+                    // 若两字符相等，则直接跳过此两字符
+                    dp[j] = leftup;
+                } else {
+                    // 最少编辑步数 = 插入、删除、替换这三种操作的最少编辑步数 + 1
+                    dp[j] = Math.min(Math.min(dp[j - 1], dp[j]), leftup) + 1;
+                }
+                leftup = temp; // 更新为下一轮的 dp[i-1, j-1]
+            }
+        }
+        return dp[m];
+    }
 }
