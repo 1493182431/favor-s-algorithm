@@ -374,4 +374,83 @@ public class good {
         }
         return dp[m];
     }
+
+
+
+
+//    给你一个由 '1'（陆地）和 '0'（水）组成的的二维网格，请你计算网格中岛屿的数量。
+//    岛屿总是被水包围，并且每座岛屿只能由水平方向和/或竖直方向上相邻的陆地连接形成。
+//    此外，你可以假设该网格的四条边均被水包围。
+    class BFS {
+        class node{//节点类，用于队列存放
+            int x;
+            int y;
+            public node(int x, int y) {
+                this.x = x;
+                this.y = y;
+            }
+        }
+        static int[][]op=new int[][] {{-1,0},{1,0},{0,-1},{0,1}};//网格坐标操作（上下左右）
+        public int numIslands(char[][] grid) {
+            int ans=0;//岛屿数
+            boolean[][] flag=new boolean[grid.length][grid[0].length];//用于标记每个节点是否已经遍历过的二维数组
+            for (int i = 0; i < grid.length; i++) {//行循环
+                for (int j = 0; j < grid[0].length; j++) {//列循环
+                    if(grid[i][j]=='1'&& !flag[i][j]){//陆地并且未遍历过
+                        //初始化
+                        Queue<node>queue=new LinkedList<>();
+                        queue.add(new node(i,j));
+                        flag[i][j]=true;
+                        //广度遍历
+                        while (!queue.isEmpty()){
+                            node n=queue.poll();
+                            for (int k = 0; k < 4; k++) {
+                                int x=n.x+op[k][0],y=n.y+op[k][1];//用从队列中取出节点的坐标进行坐标操作
+                                //下一个节点坐标在网格内并且未被遍历过并且是陆地则入队
+                                if(x>=0&&x<grid.length&&y>=0&&y<grid[0].length&&!flag[x][y]&&grid[x][y]=='1') {
+                                    queue.add(new node(x, y));
+                                    flag[x][y] = true;//不要忘记设置遍历标记
+                                }
+                            }
+                        }
+                        ans++;
+                    }
+                }
+            }
+            return ans;
+        }
+    }
+
+
+    class DFS {
+        static int[][]op=new int[][] {{-1,0},{1,0},{0,-1},{0,1}};//网格坐标操作（上下左右）
+        public int numIslands(char[][] grid) {
+            int ans=0;//岛屿数
+            boolean[][] flag=new boolean[grid.length][grid[0].length];//用于标记每个节点是否已经遍历过的二维数组
+            for (int i = 0; i < grid.length; i++) {//行循环
+                for (int j = 0; j < grid[0].length; j++) {//列循环
+                    if(grid[i][j]=='1'&& !flag[i][j]){//陆地并且未遍历过
+                        dfs(i,j,grid,flag);
+                        ans++;
+                    }
+                }
+            }
+            return ans;
+        }
+        public void dfs(int i,int j,char[][] grid,boolean[][] flag){
+            if(grid[i][j]=='0')return;
+            flag[i][j]=true;//不要忘记设置遍历标记
+            for (int k = 0; k < 4; k++) {
+                int x=i+op[k][0],y=j+op[k][1];
+                //下一个节点坐标在网格内并且未被遍历过则继续递归
+                if(x>=0&&x<grid.length&&y>=0&&y<grid[0].length&&!flag[x][y]) dfs(x, y, grid, flag);
+            }
+        }
+    }
+
+
+
+
+
+
 }
